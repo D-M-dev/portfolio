@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
 
@@ -19,8 +19,20 @@
 
       body {
         scroll-behavior: smooth;
+        overflow-x: hidden;
       }
 
+      /* Mobile Navigation */
+      .mobile-nav {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+      }
+
+      .mobile-nav.active {
+        transform: translateX(0);
+      }
+
+      /* Improved animations */
       .fade-in {
         opacity: 0;
         transform: translateY(30px);
@@ -48,79 +60,351 @@
         }
       }
 
+      /* Enhanced project cards */
       .project-card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .project-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+      }
+
+      .project-card:hover::before {
+        opacity: 1;
       }
 
       .project-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 20px 40px rgba(255, 255, 255, 0.1);
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(255, 255, 255, 0.15);
       }
 
       .project-image {
         transition: filter 0.3s ease, transform 0.3s ease;
-        filter: grayscale(100%);
+        filter: grayscale(80%) brightness(0.8);
       }
 
       .project-card:hover .project-image {
-        filter: grayscale(0%);
-        transform: scale(1.05);
+        filter: grayscale(0%) brightness(1);
+        transform: scale(1.1);
       }
 
+      /* Skills improvements */
       .skill-card {
-        transition: transform 0.3s ease;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .skill-card::after {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        transform: scale(0);
+        transition: transform 0.5s ease;
+      }
+
+      .skill-card:hover::after {
+        transform: scale(1);
       }
 
       .skill-card:hover {
-        transform: rotate(5deg) scale(1.1);
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
       }
 
+      /* Social icons */
       .social-icon {
         transition: all 0.3s ease;
+        position: relative;
+      }
+
+      .social-icon::before {
+        content: "";
+        position: absolute;
+        inset: -2px;
+        background: linear-gradient(45deg, #ffffff, #888888);
+        border-radius: 50%;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: -1;
+      }
+
+      .social-icon:hover::before {
+        opacity: 1;
       }
 
       .social-icon:hover {
-        transform: scale(1.2);
+        transform: scale(1.15) rotate(5deg);
         background-color: white;
         color: black;
       }
 
+      /* Gradient text */
       .gradient-text {
         background: linear-gradient(135deg, #ffffff 0%, #888888 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
+        animation: gradient-shift 3s ease infinite;
       }
 
+      @keyframes gradient-shift {
+        0%, 100% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+      }
+
+      /* Progress bar animation */
       .progress-bar {
-        transition: width 1s ease;
+        transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
       }
 
+      .progress-bar::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        animation: shimmer 2s infinite;
+      }
+
+      @keyframes shimmer {
+        0% {
+          transform: translateX(-100%);
+        }
+        100% {
+          transform: translateX(100%);
+        }
+      }
+
+      /* Modal improvements */
       .modal {
         display: none;
+        backdrop-filter: blur(10px);
       }
 
       .modal.active {
         display: flex;
+        animation: fadeIn 0.3s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .modal-content {
+        animation: slideUp 0.3s ease;
+      }
+
+      @keyframes slideUp {
+        from {
+          transform: translateY(50px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      /* Hamburger menu */
+      .hamburger {
+        cursor: pointer;
+        width: 30px;
+        height: 24px;
+        position: relative;
+        z-index: 1001;
+      }
+
+      .hamburger span {
+        display: block;
+        position: absolute;
+        height: 3px;
+        width: 100%;
+        background: white;
+        border-radius: 3px;
+        opacity: 1;
+        left: 0;
+        transform: rotate(0deg);
+        transition: .25s ease-in-out;
+      }
+
+      .hamburger span:nth-child(1) {
+        top: 0px;
+      }
+
+      .hamburger span:nth-child(2) {
+        top: 10px;
+      }
+
+      .hamburger span:nth-child(3) {
+        top: 20px;
+      }
+
+      .hamburger.active span:nth-child(1) {
+        top: 10px;
+        transform: rotate(135deg);
+      }
+
+      .hamburger.active span:nth-child(2) {
+        opacity: 0;
+        left: -60px;
+      }
+
+      .hamburger.active span:nth-child(3) {
+        top: 10px;
+        transform: rotate(-135deg);
+      }
+
+      /* Scroll indicator */
+      .scroll-indicator {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #ffffff 0%, #888888 100%);
+        transform-origin: left;
+        z-index: 9999;
+      }
+
+      /* Better responsive typography */
+      @media (max-width: 768px) {
+        .hero-title {
+          font-size: 3rem;
+        }
+        
+        .hero-subtitle {
+          font-size: 2rem;
+        }
+
+        .section-title {
+          font-size: 2.5rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .hero-title {
+          font-size: 2.5rem;
+        }
+        
+        .hero-subtitle {
+          font-size: 1.5rem;
+        }
+
+        .section-title {
+          font-size: 2rem;
+        }
+      }
+
+      /* Loading animation */
+      .loading-wrapper {
+        position: fixed;
+        inset: 0;
+        background: black;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        transition: opacity 0.5s ease;
+      }
+
+      .loading-wrapper.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .loader {
+        width: 50px;
+        height: 50px;
+        border: 3px solid rgba(255, 255, 255, 0.1);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
       }
     </style>
   </head>
   <body class="bg-black text-white">
+    <!-- Loading Screen -->
+    <div id="loading" class="loading-wrapper">
+      <div class="loader"></div>
+    </div>
+
+    <!-- Scroll Indicator -->
+    <div id="scroll-indicator" class="scroll-indicator"></div>
+
+    <!-- Mobile Navigation -->
+    <nav class="fixed top-0 right-0 p-6 z-50 md:hidden">
+      <div class="hamburger" onclick="toggleMobileMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </nav>
+
+    <div id="mobile-menu" class="mobile-nav fixed inset-0 bg-black z-40 flex flex-col items-center justify-center">
+      <a href="#about" onclick="toggleMobileMenu()" class="text-3xl font-semibold mb-8 hover:text-gray-400 transition">About</a>
+      <a href="#work" onclick="toggleMobileMenu()" class="text-3xl font-semibold mb-8 hover:text-gray-400 transition">Work</a>
+      <a href="#past-works" onclick="toggleMobileMenu()" class="text-3xl font-semibold mb-8 hover:text-gray-400 transition">Games</a>
+      <a href="#skills" onclick="toggleMobileMenu()" class="text-3xl font-semibold mb-8 hover:text-gray-400 transition">Skills</a>
+      <a href="#contact" onclick="toggleMobileMenu()" class="text-3xl font-semibold hover:text-gray-400 transition">Contact</a>
+    </div>
+
+    <!-- Desktop Navigation -->
+    <nav class="hidden md:flex fixed top-0 right-0 p-8 z-50 gap-6">
+      <a href="#about" class="text-lg font-medium hover:text-gray-400 transition">About</a>
+      <a href="#work" class="text-lg font-medium hover:text-gray-400 transition">Work</a>
+      <a href="#past-works" class="text-lg font-medium hover:text-gray-400 transition">Games</a>
+      <a href="#skills" class="text-lg font-medium hover:text-gray-400 transition">Skills</a>
+      <a href="#contact" class="text-lg font-medium hover:text-gray-400 transition">Contact</a>
+    </nav>
+
     <!-- Hero Section -->
-    <section
-      class="min-h-screen flex flex-col items-center justify-center px-4"
-    >
-      <div class="text-center">
-        <h1 class="text-6xl md:text-8xl font-bold mb-8 gradient-text">
+    <section class="min-h-screen flex flex-col items-center justify-center px-4 py-20">
+      <div class="text-center max-w-5xl">
+        <h1 class="hero-title text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-6 md:mb-8 gradient-text">
           Taco Dev Portfolio
         </h1>
         <div
           id="typing-text"
-          class="text-4xl md:text-6xl font-semibold mb-12 h-20 typing-cursor"
+          class="hero-subtitle text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-semibold mb-8 md:mb-12 h-16 md:h-20 typing-cursor"
         ></div>
         <button
           onclick="scrollToSection('work')"
-          class="px-8 py-4 bg-white text-black font-semibold rounded-full hover:bg-gray-200 transition-all duration-300 transform hover:scale-110"
+          class="px-6 py-3 md:px-8 md:py-4 bg-white text-black font-semibold rounded-full hover:bg-gray-200 transition-all duration-300 transform hover:scale-110 active:scale-95 text-sm md:text-base"
         >
           See my work
         </button>
@@ -128,14 +412,12 @@
     </section>
 
     <!-- About Me Section -->
-    <section id="about" class="min-h-screen py-20 px-4 fade-in">
+    <section id="about" class="min-h-screen py-12 md:py-20 px-4 fade-in">
       <div class="max-w-6xl mx-auto">
-        <h2 class="text-5xl font-bold mb-16 text-center">About Me</h2>
-        <div class="grid md:grid-cols-2 gap-12 items-center">
-          <div>
-            <div
-              class="w-64 h-64 mx-auto bg-gray-800 rounded-full overflow-hidden border-4 border-gray-700"
-            >
+        <h2 class="section-title text-3xl md:text-4xl lg:text-5xl font-bold mb-8 md:mb-16 text-center">About Me</h2>
+        <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+          <div class="order-2 md:order-1">
+            <div class="w-48 h-48 md:w-64 md:h-64 mx-auto bg-gray-800 rounded-full overflow-hidden border-4 border-gray-700 shadow-2xl">
               <img
                 src="https://i.ibb.co/gb3cWFzV/D49-C486-A-BD1-D-4664-B6-A2-5-D04080-CFABA.png"
                 alt="Profile"
@@ -143,44 +425,44 @@
               />
             </div>
           </div>
-          <div>
-            <p class="text-xl text-gray-300 mb-6 leading-relaxed">
-              I’m a NERD, programmer - discord bots and my stuff,Roblox
+          <div class="order-1 md:order-2">
+            <p class="text-base md:text-lg lg:text-xl text-gray-300 mb-6 leading-relaxed">
+              I'm a NERD, programmer - discord bots and my stuff, Roblox
               developer specializing in networking, and working with the Roblox
               API. I also focus on game systems, automation, and integrations
-              with external APIs to create connected experiences. I’m passionate
+              with external APIs to create connected experiences. I'm passionate
               about creating moderation bots as well as complex bots integrated
               with various APIs or connected to the game through REST APIs and
-              other systems. Learning machine engineering - C++,C
+              other systems. Learning machine engineering - C++, C
             </p>
-            <div class="space-y-4">
-              <div class="border-l-4 border-gray-600 pl-4">
-                <h3 class="font-semibold text-lg">2021</h3>
-                <p class="text-gray-400">
+            <div class="space-y-3 md:space-y-4">
+              <div class="border-l-4 border-gray-600 pl-3 md:pl-4 hover:border-white transition-colors">
+                <h3 class="font-semibold text-base md:text-lg">2021</h3>
+                <p class="text-gray-400 text-sm md:text-base">
                   I started working in Roblox Studio and began learning Python.
                 </p>
               </div>
-              <div class="border-l-4 border-gray-600 pl-4">
-                <h3 class="font-semibold text-lg">2022</h3>
-                <p class="text-gray-400">
+              <div class="border-l-4 border-gray-600 pl-3 md:pl-4 hover:border-white transition-colors">
+                <h3 class="font-semibold text-base md:text-lg">2022</h3>
+                <p class="text-gray-400 text-sm md:text-base">
                   Created my first advanced Discord bot for an ER:LC roleplay
                   server and started learning LuaU
                 </p>
               </div>
-              <div class="border-l-4 border-gray-600 pl-4">
-                <h3 class="font-semibold text-lg">2023</h3>
-                <p class="text-gray-400">
+              <div class="border-l-4 border-gray-600 pl-3 md:pl-4 hover:border-white transition-colors">
+                <h3 class="font-semibold text-base md:text-lg">2023</h3>
+                <p class="text-gray-400 text-sm md:text-base">
                   First projects in Luau and became part of the roblox developer
                   community.
                 </p>
               </div>
-              <div class="border-l-4 border-white pl-4">
-                <h3 class="font-semibold text-lg">2024–2025</h3>
-                <p class="text-gray-300">
+              <div class="border-l-4 border-white pl-3 md:pl-4 shadow-lg">
+                <h3 class="font-semibold text-base md:text-lg">2024–2025</h3>
+                <p class="text-gray-300 text-sm md:text-base">
                   Gained a lot of experience (contributing to czech
-                  RPs,Contributed as a developer to a Roblox game that reached
+                  RPs, Contributed as a developer to a Roblox game that reached
                   over 2 million visits.) started creating open-source projects
-                  (Roblox systems , desktop apps, Python libraries).
+                  (Roblox systems, desktop apps, Python libraries).
                 </p>
               </div>
             </div>
@@ -190,30 +472,28 @@
     </section>
 
     <!-- My Work Section -->
-    <section id="work" class="min-h-screen py-20 px-4 bg-gray-950 fade-in">
+    <section id="work" class="min-h-screen py-12 md:py-20 px-4 bg-gray-950 fade-in">
       <div class="max-w-7xl mx-auto">
-        <h2 class="text-5xl font-bold mb-16 text-center">
-          Some of my assets mainly you can find their source on my git hub.
+        <h2 class="section-title text-3xl md:text-4xl lg:text-5xl font-bold mb-8 md:mb-16 text-center">
+          Some of my assets mainly you can find their source on my GitHub.
         </h2>
         <div
           id="projects-grid"
-          class="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
         >
-          <!-- Projects will be inserte here by JavaScript -->
+          <!-- Projects will be inserted here by JavaScript -->
         </div>
       </div>
     </section>
+
     <!-- Past Works Section -->
-    <section
-      id="past-works"
-      class="min-h-screen py-20 px-4 fade-in bg-gray-900"
-    >
+    <section id="past-works" class="min-h-screen py-12 md:py-20 px-4 fade-in bg-gray-900">
       <div class="max-w-7xl mx-auto">
-        <h2 class="text-5xl font-bold mb-16 text-center">Past Works - Games</h2>
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <!-- Game Card Example -->
-          <div class="bg-gray-800 rounded-xl overflow-hidden">
-            <a
+        <h2 class="section-title text-3xl md:text-4xl lg:text-5xl font-bold mb-8 md:mb-16 text-center">Past Works - Games</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          <!-- Game Card 1 -->
+          <div class="bg-gray-800 rounded-xl overflow-hidden hover:shadow-2xl transition-all">
+            
               href="https://www.roblox.com/games/16841862338/Senec-County-Slovakia"
               target="_blank"
               class="block"
@@ -221,80 +501,81 @@
               <img
                 src="https://i.ibb.co/1tRzwG7K/21-DBDF36-71-FF-4-C41-BC65-88669-C13-AF1-F.png"
                 alt="Senec"
-                class="w-full h-48 object-cover"
+                class="w-full h-40 md:h-48 object-cover transition-transform hover:scale-105"
                 loading="lazy"
               />
-              <div class="p-6 text-center">
-                <h3 class="text-xl font-semibold mb-2">Senec County RP</h3>
-                <p class="text-gray-400 text-sm">Visits: 1.8M+</p>
-                <p class="text-gray-400 text-sm">I did here high quality RP assets, higly modular key fob or other assets for a a-chassis system.</p>
+              <div class="p-4 md:p-6 text-center">
+                <h3 class="text-lg md:text-xl font-semibold mb-2">Senec County RP</h3>
+                <p class="text-gray-400 text-xs md:text-sm mb-2">Visits: 1.8M+</p>
+                <p class="text-gray-400 text-xs md:text-sm">I did here high quality RP assets, highly modular key fob or other assets for an a-chassis system.</p>
               </div>
             </a>
           </div>
 
-          <div class="bg-gray-800 rounded-xl overflow-hidden">
-            <a
+          <!-- Game Card 2 -->
+          <div class="bg-gray-800 rounded-xl overflow-hidden hover:shadow-2xl transition-all">
+            
               href="https://www.roblox.com/games/16897965419/Czech-Realm-RP"
               target="_blank"
               class="block"
             >
               <img
                 src="https://i.ibb.co/5gn4kNZG/F97-B2-BC2-6008-4-D74-916-C-09944197-DAF9.png"
-                alt="FLOYD Game"
-                class="w-full h-48 object-cover"
+                alt="Czech Realm"
+                class="w-full h-40 md:h-48 object-cover transition-transform hover:scale-105"
                 loading="lazy"
               />
-              <div class="p-6 text-center">
-                <h3 class="text-xl font-semibold mb-2">Czech Realm</h3>
-                <p class="text-gray-400 text-sm">Visits: 500,000+</p>
-                <p class="text-gray-400 text-sm">I did here high quality RP assets. Working with API and node.js, working with rojo or our external managing systems.</p>
+              <div class="p-4 md:p-6 text-center">
+                <h3 class="text-lg md:text-xl font-semibold mb-2">Czech Realm</h3>
+                <p class="text-gray-400 text-xs md:text-sm mb-2">Visits: 500,000+</p>
+                <p class="text-gray-400 text-xs md:text-sm">I did here high quality RP assets. Working with API and node.js, working with rojo or our external managing systems.</p>
               </div>
             </a>
           </div>
 
-          <div class="bg-gray-800 rounded-xl overflow-hidden">
-            <a href="" target="_blank" class="block">
+          <!-- Game Card 3 -->
+          <div class="bg-gray-800 rounded-xl overflow-hidden hover:shadow-2xl transition-all">
+            <a href="#" target="_blank" class="block">
               <img
                 src="https://i.ibb.co/fdJXhmz1/BDD5-DFC0-DD56-4-F29-958-B-FB73245-B9347.png"
-                alt="BrainRot Battles"
-                class="w-full h-48 object-cover"
+                alt="Czech Zone"
+                class="w-full h-40 md:h-48 object-cover transition-transform hover:scale-105"
                 loading="lazy"
               />
-              <div class="p-6 text-center">
-                <h3 class="text-xl font-semibold mb-2">Czech Zone</h3>
-                <p class="text-gray-400 text-sm">There wasn't much here, it was on the white list...</p>
-                <p class="text-gray-400 text-sm">I did here high quality RP assets. Working with API and node.js</p>
+              <div class="p-4 md:p-6 text-center">
+                <h3 class="text-lg md:text-xl font-semibold mb-2">Czech Zone</h3>
+                <p class="text-gray-400 text-xs md:text-sm mb-2">There wasn't much here, it was on the white list...</p>
+                <p class="text-gray-400 text-xs md:text-sm">I did here high quality RP assets. Working with API and node.js</p>
               </div>
             </a>
           </div>
 
-          <div class="bg-gray-800 rounded-xl overflow-hidden">
-            <a href="" target="_blank" class="block">
+          <!-- Game Card 4 -->
+          <div class="bg-gray-800 rounded-xl overflow-hidden hover:shadow-2xl transition-all">
+            <a href="#" target="_blank" class="block">
               <img
                 src="https://i.ibb.co/cS31RFZX/F344-C885-5-BDB-40-D3-BA6-B-ECE17-EFE2-AE3.png"
                 alt="BrainRot Battles"
-                class="w-full h-48 object-cover"
+                class="w-full h-40 md:h-48 object-cover transition-transform hover:scale-105"
                 loading="lazy"
               />
-              <div class="p-6 text-center">
-                <h3 class="text-xl font-semibold mb-2">BrainRot Battles</h3>
-                <p class="text-gray-400 text-sm">Visits: 500,000+</p>
+              <div class="p-4 md:p-6 text-center">
+                <h3 class="text-lg md:text-xl font-semibold mb-2">BrainRot Battles</h3>
+                <p class="text-gray-400 text-xs md:text-sm">Visits: 500,000+</p>
               </div>
             </a>
           </div>
-
-          <!-- Přidej další hry stejným stylem -->
         </div>
       </div>
     </section>
 
     <!-- Skills Section -->
-    <section id="skills" class="min-h-screen py-20 px-4 fade-in">
+    <section id="skills" class="min-h-screen py-12 md:py-20 px-4 fade-in">
       <div class="max-w-6xl mx-auto">
-        <h2 class="text-5xl font-bold mb-16 text-center">Skills & Stack</h2>
+        <h2 class="section-title text-3xl md:text-4xl lg:text-5xl font-bold mb-8 md:mb-16 text-center">Skills & Stack</h2>
         <div
           id="skills-grid"
-          class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16"
+          class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8 mb-16"
         >
           <!-- Skills will be inserted here by JavaScript -->
         </div>
@@ -302,32 +583,34 @@
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="min-h-screen py-20 px-4 bg-gray-950 fade-in">
+    <section id="contact" class="min-h-screen py-12 md:py-20 px-4 bg-gray-950 fade-in">
       <div class="max-w-4xl mx-auto text-center">
-        <h2 class="text-5xl font-bold mb-16">Get In Touch</h2>
-        <p class="text-xl text-gray-300 mb-12">
-          Do you think your project is interesting? Dm me !
+        <h2 class="section-title text-3xl md:text-4xl lg:text-5xl font-bold mb-8 md:mb-16">Get In Touch</h2>
+        <p class="text-lg md:text-xl text-gray-300 mb-8 md:mb-12 px-4">
+          Do you think your project is interesting? DM me!
         </p>
-        <div class="flex justify-center gap-8 flex-wrap">
-          <a
+        <div class="flex justify-center gap-6 md:gap-8 flex-wrap">
+          
             href="https://github.com/D-M-dev"
             target="_blank"
             rel="noopener noreferrer"
-            class="social-icon w-16 h-16 bg-gray-900 rounded-full flex items-center justify-center text-2xl"
+            class="social-icon w-14 h-14 md:w-16 md:h-16 bg-gray-900 rounded-full flex items-center justify-center text-2xl relative z-10"
+            aria-label="GitHub"
           >
-            <svg class="w-8 h-8 fill-current" viewBox="0 0 24 24">
+            <svg class="w-7 h-7 md:w-8 md:h-8 fill-current" viewBox="0 0 24 24">
               <path
                 d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"
               />
             </svg>
           </a>
-          <a
+          
             href="https://www.roblox.com/users/2488479952/profile"
             target="_blank"
             rel="noopener noreferrer"
-            class="social-icon w-16 h-16 bg-gray-900 rounded-full flex items-center justify-center text-2xl"
+            class="social-icon w-14 h-14 md:w-16 md:h-16 bg-gray-900 rounded-full flex items-center justify-center text-2xl relative z-10"
+            aria-label="Roblox"
           >
-            <svg class="w-8 h-8 fill-current" viewBox="0 0 24 24">
+            <svg class="w-7 h-7 md:w-8 md:h-8 fill-current" viewBox="0 0 24 24">
               <path
                 d="M18.926 23.998L0 18.892 5.075.002 24 5.108 18.926 24zM15.348 10.09l-5.282-1.453-1.414 5.273 5.282 1.453 1.414-5.273z"
               />
@@ -340,15 +623,15 @@
     <!-- Project Modal -->
     <div
       id="project-modal"
-      class="modal fixed inset-0 bg-black bg-opacity-90 items-center justify-center p-4 z-50"
+      class="modal fixed inset-0 bg-black bg-opacity-95 items-center justify-center p-4 z-50"
+      onclick="handleModalClick(event)"
     >
-      <div
-        class="bg-gray-900 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
-      >
+      <div class="modal-content bg-gray-900 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
         <div class="relative">
           <button
             onclick="closeModal()"
-            class="absolute top-4 right-4 w-10 h-10 bg-white text-black rounded-full hover:bg-gray-200 transition-colors z-10"
+            class="absolute top-2 right-2 md:top-4 md:right-4 w-8 h-8 md:w-10 md:h-10 bg-white text-black rounded-full hover:bg-gray-200 transition-colors z-10 flex items-center justify-center text-xl md:text-2xl font-bold"
+            aria-label="Close modal"
           >
             ✕
           </button>
@@ -356,24 +639,47 @@
             id="modal-image"
             src=""
             alt=""
-            class="w-full h-64 object-cover rounded-t-xl"
+            class="w-full h-48 md:h-64 object-cover rounded-t-xl"
           />
         </div>
-        <div class="p-8">
-          <h3 id="modal-title" class="text-3xl font-bold mb-4"></h3>
-          <p id="modal-description" class="text-gray-300 text-lg mb-6"></p>
-          <div id="modal-tech" class="flex flex-wrap gap-3 mb-6"></div>
+        <div class="p-4 md:p-8">
+          <h3 id="modal-title" class="text-2xl md:text-3xl font-bold mb-3 md:mb-4"></h3>
+          <p id="modal-description" class="text-gray-300 text-sm md:text-lg mb-4 md:mb-6"></p>
+          <div id="modal-tech" class="flex flex-wrap gap-2 md:gap-3 mb-4 md:mb-6"></div>
           <div id="modal-video"></div>
         </div>
       </div>
     </div>
 
     <!-- Footer -->
-    <footer class="py-8 text-center text-gray-500 border-t border-gray-900">
-      <p>Made by taco, source on my github.</p>
+    <footer class="py-6 md:py-8 text-center text-gray-500 border-t border-gray-900">
+      <p class="text-sm md:text-base">Made by taco, source on my GitHub.</p>
     </footer>
 
     <script>
+      // Loading screen
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          document.getElementById('loading').classList.add('hidden');
+        }, 500);
+      });
+
+      // Scroll indicator
+      window.addEventListener('scroll', () => {
+        const scrollIndicator = document.getElementById('scroll-indicator');
+        const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (window.scrollY / windowHeight) * 100;
+        scrollIndicator.style.transform = `scaleX(${scrolled / 100})`;
+      });
+
+      // Mobile menu toggle
+      function toggleMobileMenu() {
+        const menu = document.getElementById('mobile-menu');
+        const hamburger = document.querySelector('.hamburger');
+        menu.classList.toggle('active');
+        hamburger.classList.toggle('active');
+      }
+
       // Typing animation
       const phrases = ["Roblox Dev", "Programmer", "Bot Developer"];
       let currentPhraseIndex = 0;
@@ -416,11 +722,20 @@
       function scrollToSection(sectionId) {
         const element = document.getElementById(sectionId);
         element.scrollIntoView({ behavior: "smooth" });
+        
+        // Close mobile menu if open
+        const menu = document.getElementById('mobile-menu');
+        const hamburger = document.querySelector('.hamburger');
+        if (menu.classList.contains('active')) {
+          menu.classList.remove('active');
+          hamburger.classList.remove('active');
+        }
       }
 
       // Intersection Observer for fade-in animations
       const observerOptions = {
         threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
       };
 
       const observer = new IntersectionObserver((entries) => {
@@ -439,11 +754,11 @@
       const projects = [
         {
           id: 1,
-          title: "Gun System in 3. person",
+          title: "Gun System in 3rd Person",
           image:
             "https://i.ibb.co/5WjfXkvL/E64-FC619-8-B23-4-DC9-9-E19-72-EEEF971937-kopie.png",
           description:
-            "Open source gun system, with animations (credits: to czeck), raycast modules, heavily modular ,source on my git hub",
+            "Open source gun system, with animations (credits: to czeck), raycast modules, heavily modular, source on my GitHub",
           tech: ["Lua", "Roblox Studio", "Sys"],
           video: "",
         },
@@ -453,7 +768,7 @@
           image:
             "https://i.ibb.co/8DzMpd8L/EFE78065-0-A9-B-43-C6-976-E-A0773081-E221.png",
           description:
-            "Server-side security system designed to protect your Roblox game from exploiters and cheaters.Source on my github",
+            "Server-side security system designed to protect your Roblox game from exploiters and cheaters. Source on my GitHub",
           tech: ["Roblox", "MY stuff", "Luau", "Security"],
           video: "https://files.catbox.moe/g2ot21.mkv",
         },
@@ -463,111 +778,109 @@
           image:
             "https://i.ibb.co/zhjyrqms/8-E73548-F-C176-4836-9237-AA8-F446748-BF.png",
           description:
-            "Asisstant for developers/admins in game, view local scripts, edit workspace and so long it should be open source if it doesn't then it is under update",
+            "Assistant for developers/admins in game, view local scripts, edit workspace and so long it should be open source if it doesn't then it is under update",
           tech: ["Roblox", "MY stuff", "Luau"],
           video: "https://files.catbox.moe/abwsbr.mkv",
         },
         {
-          id: 3,
-          title: "Character Creation system",
+          id: 4,
+          title: "Character Creation System",
           image:
             "https://i.ibb.co/spX7xXP8/2931740-B-4-C7-C-4-E2-A-905-D-35-B0-C3-E7-C077.png",
-          description: "Character Creation system similiar to gta v",
+          description: "Character Creation system similar to GTA V",
           tech: ["Roblox", "Security", "Luau"],
           video: null,
         },
         {
-          id: 3,
-          title: "BrainRot game ",
+          id: 5,
+          title: "BrainRot Game",
           image:
             "https://i.ibb.co/QwnJXZQ/CEC592-F2-8-D91-42-FE-BE1-B-75-A5-E8382300.png",
           description:
             "I'm not proud of it :(, but I made a lot of quality systems here and scripted the AI",
-          tech: ["Roblox", "Games","AI", "Luau"],
+          tech: ["Roblox", "Games", "AI", "Luau"],
           video: "https://files.catbox.moe/ounxuq.mkv",
         },
-
         {
-          id: 3,
-          title: "Skiddy scripts finder",
+          id: 6,
+          title: "Skiddy Scripts Finder",
           image:
             "https://i.ibb.co/fVFVvsK7/CDF99423-808-D-492-F-8782-AA80-E4-D583-F3.png",
           description:
-            "Skiddy finder,focuses on require(assetID),loadstring(),Base64 encoded requires/loadstrings, calculated IDs(math operations, etc),I am extremely proud of this project and definitely want to improve this system and help creators maintain a safe environment.Source is not avaible yet but you can look on my attached video.",
+            "Skiddy finder, focuses on require(assetID), loadstring(), Base64 encoded requires/loadstrings, calculated IDs (math operations, etc). I am extremely proud of this project and definitely want to improve this system and help creators maintain a safe environment. Source is not available yet but you can look at my attached video.",
           tech: ["Roblox", "Security", "Luau"],
           video: "https://files.catbox.moe/7wg1ao.mkv",
         },
         {
-          id: 4,
+          id: 7,
           title: "AntiCheat",
           image:
             "https://i.ibb.co/cc38CHkf/B6-F89919-EB6-C-4954-962-D-9-A062401739-F.png",
           description:
-            "anti hook, server validiation, movement detection, attaching noclip module",
+            "Anti-hook, server validation, movement detection, attaching noclip module",
           tech: ["Roblox", "Security", "Luau"],
           video: "https://files.catbox.moe/g1e0uv.mp4",
         },
         {
-          id: 4,
-          title: "Open-source GUI framework inspired by React",
+          id: 8,
+          title: "Open-Source GUI Framework",
           image:
             "https://i.ibb.co/7dBkkTp2/252-B0628-DBCB-4338-9-EB6-147-A999530-B9.png",
           description:
-            "a system that allows you to declaratively create UIs in Lua (something like Roact, but simpler).Source: https://github.com/D-M-dev/Modular-Roblox-GUI-framework",
+            "A system that allows you to declaratively create UIs in Lua (something like Roact, but simpler). Source: https://github.com/D-M-dev/Modular-Roblox-GUI-framework",
           tech: ["Lua", "Roblox", "Sys"],
           video: "https://files.catbox.moe/a36fj6.mkv",
         },
         {
-          id: 5,
-          title: "Open-source admin system",
+          id: 9,
+          title: "Open-Source Admin System",
           image:
             "https://i.ibb.co/TDtzt4zR/67256-A5-A-3-AF6-476-E-8-EC2-A0-EA942-E10-BB.png",
-          description: "Inspirated by my mind and arch terminal.",
+          description: "Inspired by my mind and arch terminal.",
           tech: ["Lua", "Roblox", "Sys"],
           video: null,
         },
         {
-          id: 4,
-          title: "Example of RP stuff- Police Spike strip",
+          id: 10,
+          title: "RP Stuff - Police Spike Strip",
           image:
             "https://i.ibb.co/nqp5d38V/2-FA080-EF-325-F-4-EB4-A82-B-7-C5-E12-B577-CE.png",
           description:
-            "I did lot of RP stuff, every would not fit here..., this spike strip has place animation and working spike with a-chassis",
+            "I did a lot of RP stuff, every would not fit here... This spike strip has place animation and working spike with a-chassis",
           tech: ["Lua", "Roblox", "Sys"],
           video: null,
         },
         {
-          id: 5,
-          title: "Server Lister with flags modules",
+          id: 11,
+          title: "Server Lister with Flags",
           image:
             "https://i.ibb.co/hFcjYvmb/BA033059-A59-A-4-A49-B86-F-863-D74-B98-AC3.png",
           description: "Server lister with player counter, flag id and join.",
-          tech: ["luau"],
+          tech: ["Luau"],
           video: null,
         },
         {
-          id: 5,
-          title: "Discord ticket bot",
+          id: 12,
+          title: "Discord Ticket Bot",
           image:
             "https://i.ibb.co/PsNnLV6H/EB99-CCBC-6-B20-4-A8-E-8050-6504068048-E7.png",
           description:
-            "Advanced discord bot (discord.py), after close log, send dms to users etc.",
-          tech: ["discord"],
+            "Advanced Discord bot (discord.py), after close log, send DMs to users etc.",
+          tech: ["Discord"],
           video: null,
         },
-
         {
-          id: 5,
+          id: 13,
           title: "Discord-Roblox Moderation Bot",
           image:
             "https://i.ibb.co/fzb1QW1m/7-FD8-DCF1-F4-B8-4-A86-AF08-CAC12-A24-FCC0.png",
           description:
-            "Advanced discord bot (node.js), managing roblox group,moderation action from discord to roblox game (bans, warns, etc)",
-          tech: ["discord"],
+            "Advanced Discord bot (node.js), managing Roblox group, moderation action from Discord to Roblox game (bans, warns, etc)",
+          tech: ["Discord"],
           video: null,
         },
         {
-          id: 5,
+          id: 14,
           title: "TeleportManager",
           image:
             "https://i.ibb.co/27VPm8FB/24-E774-A3-05-B4-41-F0-8888-45157734-F3-CA.png",
@@ -576,40 +889,38 @@
           video: null,
         },
         {
-          id: 6,
-          title: "This web",
+          id: 15,
+          title: "This Web",
           image: "",
-          description: "Xd, I have to put this there.",
+          description: "XD, I have to put this there.",
           tech: ["React", "Node.js", "Chart.js"],
           video: null,
         },
         {
-          id: 7,
+          id: 16,
           title: "Custom API Wrapper",
           image: "",
           description:
-            "Python wrapper pro Roblox API s rate limiting a caching",
+            "Python wrapper for Roblox API with rate limiting and caching",
           tech: ["Python", "FastAPI", "Redis"],
           video: null,
         },
         {
-          id: 7,
+          id: 17,
           title: "FL4gs",
           image: "",
           description:
-            "FL4GS provides centralized management for application state using flags (state markers) that you can set, retrieve, freeze, or remove.Forked and customized from https://github.com/STRA8/FL4GS",
-          tech: ["LUAU", "github"],
+            "FL4GS provides centralized management for application state using flags (state markers) that you can set, retrieve, freeze, or remove. Forked and customized from https://github.com/STRA8/FL4GS",
+          tech: ["LUAU", "GitHub"],
           video: null,
         },
-
         {
-          id: 7,
-          title:
-            "Free solution for api to connect external apps to roblox via Trello API",
+          id: 18,
+          title: "Trello-Discord-Roblox Integration",
           image: "",
           description:
-            "A Discord bot connected to the Trello API and a Roblox server system, designed to monitor and retrieve information from both platforms. The bot automates moderation tasks in Roblox by processing API commands and provides seamless integration with Trello for task management and tracking..",
-          tech: ["LUAU", "github", "python"],
+            "A Discord bot connected to the Trello API and a Roblox server system, designed to monitor and retrieve information from both platforms. The bot automates moderation tasks in Roblox by processing API commands and provides seamless integration with Trello for task management and tracking.",
+          tech: ["LUAU", "GitHub", "Python"],
           video: null,
         },
       ];
@@ -618,15 +929,15 @@
       const skills = [
         {
           name: "Luau",
-          icon: "",
+          icon: "🎮",
           level: 100,
         },
         { name: "Python", icon: "🐍", level: 100 },
-        { name: "JavaScript,node.js", icon: "", level: 85 },
-        { name: "Roblox Studio", icon: "", level: 100 },
-        { name: "Discord API", icon: "", level: 100 },
-        { name: "Kotlin", icon: "", level: 20 },
-        { name: "C++", icon: "", level: 5 },
+        { name: "JavaScript/Node.js", icon: "⚡", level: 85 },
+        { name: "Roblox Studio", icon: "🎨", level: 100 },
+        { name: "Discord API", icon: "💬", level: 100 },
+        { name: "Kotlin", icon: "📱", level: 20 },
+        { name: "C++", icon: "⚙️", level: 5 },
       ];
 
       // Render projects
@@ -638,24 +949,24 @@
         projectCard.onclick = () => openModal(project);
 
         projectCard.innerHTML = `
-                <div class="overflow-hidden">
+                <div class="overflow-hidden h-40 md:h-48">
                     <img
-                        src="${project.image}"
+                        src="${project.image || 'https://via.placeholder.com/400x300/1f2937/ffffff?text=Project'}"
                         alt="${project.title}"
-                        class="project-image w-full h-48 object-cover"
+                        class="project-image w-full h-full object-cover"
                         loading="lazy"
                     />
                 </div>
-                <div class="p-6">
-                    <h3 class="text-xl font-semibold mb-2">${project.title}</h3>
-                    <p class="text-gray-400 text-sm mb-4">${
+                <div class="p-4 md:p-6">
+                    <h3 class="text-lg md:text-xl font-semibold mb-2">${project.title}</h3>
+                    <p class="text-gray-400 text-xs md:text-sm mb-3 md:mb-4 line-clamp-3">${
                       project.description
                     }</p>
                     <div class="flex flex-wrap gap-2">
                         ${project.tech
                           .map(
                             (tech) => `
-                            <span class="px-3 py-1 bg-gray-800 text-gray-300 text-xs rounded-full">
+                            <span class="px-2 md:px-3 py-1 bg-gray-800 text-gray-300 text-xs rounded-full">
                                 ${tech}
                             </span>
                         `
@@ -670,18 +981,31 @@
 
       // Render skills
       const skillsGrid = document.getElementById("skills-grid");
-      skills.forEach((skill) => {
+      skills.forEach((skill, index) => {
         const skillCard = document.createElement("div");
         skillCard.className =
-          "skill-card bg-gray-900 p-6 rounded-xl text-center";
+          "skill-card bg-gray-900 p-4 md:p-6 rounded-xl text-center";
+        
+        // Delayed animation for skills
+        setTimeout(() => {
+          skillCard.style.opacity = '0';
+          skillCard.style.transform = 'translateY(20px)';
+          skillCard.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+          
+          setTimeout(() => {
+            skillCard.style.opacity = '1';
+            skillCard.style.transform = 'translateY(0)';
+          }, 50);
+        }, index * 100);
 
         skillCard.innerHTML = `
-                <div class="text-5xl mb-4">${skill.icon}</div>
-                <h3 class="text-xl font-semibold mb-3">${skill.name}</h3>
+                <div class="text-3xl md:text-5xl mb-3 md:mb-4">${skill.icon}</div>
+                <h3 class="text-base md:text-xl font-semibold mb-2 md:mb-3">${skill.name}</h3>
                 <div class="bg-gray-800 rounded-full h-2 overflow-hidden">
                     <div
                         class="progress-bar bg-white h-full rounded-full"
-                        style="width: ${skill.level}%"
+                        style="width: 0%"
+                        data-width="${skill.level}"
                     ></div>
                 </div>
             `;
@@ -689,10 +1013,28 @@
         skillsGrid.appendChild(skillCard);
       });
 
+      // Animate skill bars when visible
+      const skillObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const progressBars = entry.target.querySelectorAll('.progress-bar');
+            progressBars.forEach((bar) => {
+              const width = bar.getAttribute('data-width');
+              setTimeout(() => {
+                bar.style.width = width + '%';
+              }, 200);
+            });
+            skillObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.2 });
+
+      skillObserver.observe(document.getElementById('skills-grid'));
+
       // Modal functions
       function openModal(project) {
         const modal = document.getElementById("project-modal");
-        document.getElementById("modal-image").src = project.image;
+        document.getElementById("modal-image").src = project.image || 'https://via.placeholder.com/800x400/1f2937/ffffff?text=Project';
         document.getElementById("modal-image").alt = project.title;
         document.getElementById("modal-title").textContent = project.title;
         document.getElementById("modal-description").textContent =
@@ -702,7 +1044,7 @@
         techContainer.innerHTML = project.tech
           .map(
             (tech) => `
-                <span class="px-4 py-2 bg-gray-800 text-gray-200 rounded-full">
+                <span class="px-3 md:px-4 py-1 md:py-2 bg-gray-800 text-gray-200 rounded-full text-xs md:text-sm">
                     ${tech}
                 </span>
             `
@@ -717,6 +1059,7 @@
                         controls
                         class="w-full rounded-xl"
                         loading="lazy"
+                        preload="metadata"
                     ></video>
                 `;
         } else {
@@ -724,19 +1067,42 @@
         }
 
         modal.classList.add("active");
+        document.body.style.overflow = 'hidden';
       }
 
       function closeModal() {
-        document.getElementById("project-modal").classList.remove("active");
+        const modal = document.getElementById("project-modal");
+        modal.classList.remove("active");
+        document.body.style.overflow = 'auto';
+        
+        // Stop video if playing
+        const video = modal.querySelector('video');
+        if (video) {
+          video.pause();
+          video.currentTime = 0;
+        }
       }
 
-      document
-        .getElementById("project-modal")
-        .addEventListener("click", function (e) {
-          if (e.target === this) {
-            closeModal();
-          }
-        });
+      function handleModalClick(event) {
+        if (event.target.id === 'project-modal') {
+          closeModal();
+        }
+      }
+
+      // Close modal on escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          closeModal();
+        }
+      });
+
+      // Prevent scroll on mobile when modal is open
+      document.getElementById('project-modal').addEventListener('touchmove', (e) => {
+        const modalContent = document.querySelector('.modal-content');
+        if (!modalContent.contains(e.target)) {
+          e.preventDefault();
+        }
+      }, { passive: false });
     </script>
   </body>
 </html>
