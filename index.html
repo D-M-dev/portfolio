@@ -11,6 +11,7 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
     <style>
       * {
@@ -20,23 +21,142 @@
       body {
         scroll-behavior: smooth;
         overflow-x: hidden;
+        background: #000;
       }
 
-      /* Mobile Navigation */
+      /* 3D Canvas Background */
+      #canvas-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        pointer-events: none;
+      }
+
+      .content-wrapper {
+        position: relative;
+        z-index: 1;
+      }
+
+      /* Particle effect */
+      .particle {
+        position: absolute;
+        background: white;
+        border-radius: 50%;
+        pointer-events: none;
+        animation: float 6s infinite ease-in-out;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0) translateX(0);
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+        }
+        90% {
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-100vh) translateX(50px);
+          opacity: 0;
+        }
+      }
+
+      /* Enhanced Mobile Navigation */
       .mobile-nav {
         transform: translateX(-100%);
-        transition: transform 0.3s ease;
+        transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        backdrop-filter: blur(20px);
+        background: rgba(0, 0, 0, 0.95);
       }
 
       .mobile-nav.active {
         transform: translateX(0);
       }
 
-      /* Improved animations */
+      /* Glitch effect for hero title */
+      .glitch {
+        position: relative;
+        animation: glitch-skew 3s infinite;
+      }
+
+      .glitch::before,
+      .glitch::after {
+        content: attr(data-text);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .glitch::before {
+        animation: glitch-anim-1 2s infinite linear alternate-reverse;
+        color: #fff;
+        text-shadow: -2px 0 #ff00ff;
+        clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+      }
+
+      .glitch::after {
+        animation: glitch-anim-2 3s infinite linear alternate-reverse;
+        color: #fff;
+        text-shadow: 2px 0 #00ffff;
+        clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+      }
+
+      @keyframes glitch-anim-1 {
+        0% {
+          clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+        }
+        50% {
+          clip-path: polygon(0 20%, 100% 20%, 100% 70%, 0 70%);
+        }
+        100% {
+          clip-path: polygon(0 40%, 100% 40%, 100% 90%, 0 90%);
+        }
+      }
+
+      @keyframes glitch-anim-2 {
+        0% {
+          clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+        }
+        50% {
+          clip-path: polygon(0 30%, 100% 30%, 100% 80%, 0 80%);
+        }
+        100% {
+          clip-path: polygon(0 10%, 100% 10%, 100% 60%, 0 60%);
+        }
+      }
+
+      @keyframes glitch-skew {
+        0% {
+          transform: skew(0deg);
+        }
+        10% {
+          transform: skew(-2deg);
+        }
+        20% {
+          transform: skew(2deg);
+        }
+        30% {
+          transform: skew(0deg);
+        }
+        100% {
+          transform: skew(0deg);
+        }
+      }
+
+      /* Advanced animations */
       .fade-in {
         opacity: 0;
-        transform: translateY(30px);
-        transition: opacity 0.8s ease, transform 0.8s ease;
+        transform: translateY(50px);
+        transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1),
+          transform 1s cubic-bezier(0.4, 0, 0.2, 1);
       }
 
       .fade-in-visible {
@@ -44,139 +164,221 @@
         transform: translateY(0);
       }
 
-      .typing-cursor::after {
-        content: "|";
-        animation: blink 1s step-end infinite;
-        margin-left: 2px;
+      .slide-in-left {
+        opacity: 0;
+        transform: translateX(-100px);
+        transition: opacity 0.8s ease, transform 0.8s ease;
       }
 
-      @keyframes blink {
-        0%,
-        100% {
-          opacity: 1;
-        }
-        50% {
-          opacity: 0;
-        }
+      .slide-in-right {
+        opacity: 0;
+        transform: translateX(100px);
+        transition: opacity 0.8s ease, transform 0.8s ease;
       }
 
-      /* Enhanced project cards */
+      .slide-in-left.visible,
+      .slide-in-right.visible {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      /* 3D Card effect */
+      .card-3d {
+        transform-style: preserve-3d;
+        transition: transform 0.5s ease;
+      }
+
+      .card-3d:hover {
+        transform: perspective(1000px) rotateY(10deg) rotateX(5deg) scale(1.05);
+      }
+
+      /* Enhanced project cards with 3D flip */
       .project-card {
-        transition: all 0.3s ease;
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
         overflow: hidden;
+        transform-style: preserve-3d;
+        perspective: 1000px;
       }
 
       .project-card::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 100%);
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        pointer-events: none;
-      }
-
-      .project-card:hover::before {
-        opacity: 1;
-      }
-
-      .project-card:hover {
-        transform: translateY(-8px) scale(1.02);
-        box-shadow: 0 20px 40px rgba(255, 255, 255, 0.15);
-      }
-
-      .project-image {
-        transition: filter 0.3s ease, transform 0.3s ease;
-        filter: grayscale(80%) brightness(0.8);
-      }
-
-      .project-card:hover .project-image {
-        filter: grayscale(0%) brightness(1);
-        transform: scale(1.1);
-      }
-
-      /* Skills improvements */
-      .skill-card {
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-      }
-
-      .skill-card::after {
         content: "";
         position: absolute;
         top: -50%;
         left: -50%;
         width: 200%;
         height: 200%;
-        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        background: linear-gradient(
+          45deg,
+          transparent,
+          rgba(255, 255, 255, 0.1),
+          transparent
+        );
+        transform: rotate(45deg);
+        transition: all 0.6s ease;
+      }
+
+      .project-card:hover::before {
+        left: 100%;
+      }
+
+      .project-card:hover {
+        transform: translateY(-15px) scale(1.03);
+        box-shadow: 0 30px 60px rgba(255, 255, 255, 0.2);
+      }
+
+      .project-image {
+        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        filter: grayscale(100%) brightness(0.7) contrast(1.2);
+      }
+
+      .project-card:hover .project-image {
+        filter: grayscale(0%) brightness(1) contrast(1);
+        transform: scale(1.15) rotate(2deg);
+      }
+
+      /* Holographic effect */
+      .holographic {
+        position: relative;
+        background: linear-gradient(135deg, #000 0%, #1a1a1a 100%);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .holographic::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          135deg,
+          transparent 0%,
+          rgba(255, 255, 255, 0.1) 25%,
+          transparent 50%,
+          rgba(255, 255, 255, 0.1) 75%,
+          transparent 100%
+        );
+        background-size: 200% 200%;
+        animation: holographic-move 8s ease infinite;
+        pointer-events: none;
+      }
+
+      @keyframes holographic-move {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      /* Skills with 3D rotation */
+      .skill-card {
+        transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        position: relative;
+        overflow: hidden;
+        transform-style: preserve-3d;
+      }
+
+      .skill-card::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(
+          circle at center,
+          rgba(255, 255, 255, 0.2) 0%,
+          transparent 70%
+        );
         transform: scale(0);
-        transition: transform 0.5s ease;
+        transition: transform 0.6s ease;
+      }
+
+      .skill-card:hover {
+        transform: translateY(-10px) rotateX(10deg) scale(1.05);
+        box-shadow: 0 20px 40px rgba(255, 255, 255, 0.15);
       }
 
       .skill-card:hover::after {
         transform: scale(1);
       }
 
-      .skill-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
-      }
-
-      /* Social icons */
+      /* Animated social icons with glow */
       .social-icon {
-        transition: all 0.3s ease;
+        transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         position: relative;
       }
 
       .social-icon::before {
         content: "";
         position: absolute;
-        inset: -2px;
+        inset: -5px;
         background: linear-gradient(45deg, #ffffff, #888888);
         border-radius: 50%;
         opacity: 0;
-        transition: opacity 0.3s ease;
+        filter: blur(10px);
+        transition: opacity 0.4s ease;
         z-index: -1;
       }
 
       .social-icon:hover::before {
         opacity: 1;
+        animation: pulse 1.5s infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.2);
+        }
       }
 
       .social-icon:hover {
-        transform: scale(1.15) rotate(5deg);
+        transform: scale(1.2) rotate(360deg);
         background-color: white;
         color: black;
       }
 
-      /* Gradient text */
+      /* Enhanced gradient text with animation */
       .gradient-text {
-        background: linear-gradient(135deg, #ffffff 0%, #888888 100%);
+        background: linear-gradient(
+          135deg,
+          #ffffff 0%,
+          #666666 50%,
+          #ffffff 100%
+        );
+        background-size: 200% 200%;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-        animation: gradient-shift 3s ease infinite;
+        animation: gradient-flow 4s ease infinite;
+        text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
       }
 
-      @keyframes gradient-shift {
-        0%, 100% {
+      @keyframes gradient-flow {
+        0% {
           background-position: 0% 50%;
         }
         50% {
           background-position: 100% 50%;
         }
+        100% {
+          background-position: 0% 50%;
+        }
       }
 
-      /* Progress bar animation */
+      /* Progress bar with glow */
       .progress-bar {
-        transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: width 2s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
         overflow: hidden;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
       }
 
       .progress-bar::after {
@@ -186,8 +388,13 @@
         left: 0;
         bottom: 0;
         right: 0;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-        animation: shimmer 2s infinite;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.6),
+          transparent
+        );
+        animation: shimmer 2.5s infinite;
       }
 
       @keyframes shimmer {
@@ -195,19 +402,20 @@
           transform: translateX(-100%);
         }
         100% {
-          transform: translateX(100%);
+          transform: translateX(200%);
         }
       }
 
-      /* Modal improvements */
+      /* Enhanced modal */
       .modal {
         display: none;
-        backdrop-filter: blur(10px);
+        backdrop-filter: blur(20px);
+        background: rgba(0, 0, 0, 0.9);
       }
 
       .modal.active {
         display: flex;
-        animation: fadeIn 0.3s ease;
+        animation: fadeIn 0.4s ease;
       }
 
       @keyframes fadeIn {
@@ -220,25 +428,26 @@
       }
 
       .modal-content {
-        animation: slideUp 0.3s ease;
+        animation: modalSlideUp 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        box-shadow: 0 0 50px rgba(255, 255, 255, 0.3);
       }
 
-      @keyframes slideUp {
+      @keyframes modalSlideUp {
         from {
-          transform: translateY(50px);
+          transform: translateY(100px) scale(0.9);
           opacity: 0;
         }
         to {
-          transform: translateY(0);
+          transform: translateY(0) scale(1);
           opacity: 1;
         }
       }
 
-      /* Hamburger menu */
+      /* Hamburger menu enhanced */
       .hamburger {
         cursor: pointer;
-        width: 30px;
-        height: 24px;
+        width: 35px;
+        height: 28px;
         position: relative;
         z-index: 1001;
       }
@@ -246,30 +455,29 @@
       .hamburger span {
         display: block;
         position: absolute;
-        height: 3px;
+        height: 4px;
         width: 100%;
         background: white;
-        border-radius: 3px;
+        border-radius: 4px;
         opacity: 1;
         left: 0;
         transform: rotate(0deg);
-        transition: .25s ease-in-out;
+        transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
       }
 
       .hamburger span:nth-child(1) {
         top: 0px;
       }
-
       .hamburger span:nth-child(2) {
-        top: 10px;
+        top: 12px;
       }
-
       .hamburger span:nth-child(3) {
-        top: 20px;
+        top: 24px;
       }
 
       .hamburger.active span:nth-child(1) {
-        top: 10px;
+        top: 12px;
         transform: rotate(135deg);
       }
 
@@ -279,32 +487,151 @@
       }
 
       .hamburger.active span:nth-child(3) {
-        top: 10px;
+        top: 12px;
         transform: rotate(-135deg);
       }
 
-      /* Scroll indicator */
+      /* Scroll indicator enhanced */
       .scroll-indicator {
         position: fixed;
         top: 0;
         left: 0;
         right: 0;
-        height: 3px;
-        background: linear-gradient(90deg, #ffffff 0%, #888888 100%);
+        height: 4px;
+        background: linear-gradient(
+          90deg,
+          #ffffff 0%,
+          #888888 50%,
+          #ffffff 100%
+        );
+        background-size: 200% 100%;
         transform-origin: left;
         z-index: 9999;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        animation: gradient-flow 3s linear infinite;
       }
 
-      /* Better responsive typography */
+      /* Typing cursor enhanced */
+      .typing-cursor::after {
+        content: "|";
+        animation: blink 1s step-end infinite;
+        margin-left: 4px;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+      }
+
+      @keyframes blink {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0;
+        }
+      }
+
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #000;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: linear-gradient(180deg, #fff, #888);
+        border-radius: 10px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: #fff;
+      }
+
+      /* Loading animation enhanced */
+      .loading-wrapper {
+        position: fixed;
+        inset: 0;
+        background: black;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        transition: opacity 0.8s ease;
+      }
+
+      .loading-wrapper.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .loader {
+        width: 60px;
+        height: 60px;
+        border: 4px solid rgba(255, 255, 255, 0.1);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Parallax sections */
+      .parallax-section {
+        position: relative;
+        background-attachment: fixed;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+
+      /* Text reveal animation */
+      .reveal-text {
+        clip-path: polygon(0 0, 0 0, 0 100%, 0% 100%);
+        transition: clip-path 1s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .reveal-text.visible {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+      }
+
+      /* Button hover effect */
+      .btn-hero {
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+      }
+
+      .btn-hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          45deg,
+          transparent,
+          rgba(255, 255, 255, 0.3),
+          transparent
+        );
+        transform: translateX(-100%);
+        transition: transform 0.6s ease;
+      }
+
+      .btn-hero:hover::before {
+        transform: translateX(100%);
+      }
+
+      /* Responsive improvements */
       @media (max-width: 768px) {
         .hero-title {
           font-size: 3rem;
         }
-        
         .hero-subtitle {
           font-size: 2rem;
         }
-
         .section-title {
           font-size: 2.5rem;
         }
@@ -314,50 +641,71 @@
         .hero-title {
           font-size: 2.5rem;
         }
-        
         .hero-subtitle {
           font-size: 1.5rem;
         }
-
         .section-title {
           font-size: 2rem;
         }
       }
 
-      /* Loading animation */
-      .loading-wrapper {
-        position: fixed;
-        inset: 0;
-        background: black;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 10000;
-        transition: opacity 0.5s ease;
+      /* Timeline style */
+      .timeline-item {
+        position: relative;
+        padding-left: 40px;
       }
 
-      .loading-wrapper.hidden {
-        opacity: 0;
-        pointer-events: none;
+      .timeline-item::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: -20px;
+        width: 2px;
+        background: linear-gradient(180deg, white, transparent);
       }
 
-      .loader {
-        width: 50px;
-        height: 50px;
-        border: 3px solid rgba(255, 255, 255, 0.1);
-        border-top-color: white;
+      .timeline-item::after {
+        content: "";
+        position: absolute;
+        left: -4px;
+        top: 6px;
+        width: 10px;
+        height: 10px;
         border-radius: 50%;
-        animation: spin 1s linear infinite;
+        background: white;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
       }
 
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
+      .timeline-item:hover::after {
+        animation: pulse 1s infinite;
+      }
+
+      /* Floating animation */
+      .float {
+        animation: floating 3s ease-in-out infinite;
+      }
+
+      @keyframes floating {
+        0%,
+        100% {
+          transform: translateY(0px);
         }
+        50% {
+          transform: translateY(-20px);
+        }
+      }
+
+      /* Neon text effect */
+      .neon-text {
+        text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #fff, 0 0 40px #fff;
       }
     </style>
   </head>
   <body class="bg-black text-white">
+    <!-- 3D Canvas Background -->
+    <div id="canvas-container"></div>
+
     <!-- Loading Screen -->
     <div id="loading" class="loading-wrapper">
       <div class="loader"></div>
@@ -366,318 +714,572 @@
     <!-- Scroll Indicator -->
     <div id="scroll-indicator" class="scroll-indicator"></div>
 
-    <!-- Mobile Navigation -->
-    <nav class="fixed top-0 right-0 p-6 z-50 md:hidden">
-      <div class="hamburger" onclick="toggleMobileMenu()">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-    </nav>
+    <div class="content-wrapper">
+      <!-- Mobile Navigation -->
+      <nav class="fixed top-0 right-0 p-6 z-50 md:hidden">
+        <div class="hamburger" onclick="toggleMobileMenu()">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </nav>
 
-    <div id="mobile-menu" class="mobile-nav fixed inset-0 bg-black z-40 flex flex-col items-center justify-center">
-      <a href="#about" onclick="toggleMobileMenu()" class="text-3xl font-semibold mb-8 hover:text-gray-400 transition">About</a>
-      <a href="#work" onclick="toggleMobileMenu()" class="text-3xl font-semibold mb-8 hover:text-gray-400 transition">Work</a>
-      <a href="#past-works" onclick="toggleMobileMenu()" class="text-3xl font-semibold mb-8 hover:text-gray-400 transition">Games</a>
-      <a href="#skills" onclick="toggleMobileMenu()" class="text-3xl font-semibold mb-8 hover:text-gray-400 transition">Skills</a>
-      <a href="#contact" onclick="toggleMobileMenu()" class="text-3xl font-semibold hover:text-gray-400 transition">Contact</a>
-    </div>
-
-    <!-- Desktop Navigation -->
-    <nav class="hidden md:flex fixed top-0 right-0 p-8 z-50 gap-6">
-      <a href="#about" class="text-lg font-medium hover:text-gray-400 transition">About</a>
-      <a href="#work" class="text-lg font-medium hover:text-gray-400 transition">Work</a>
-      <a href="#past-works" class="text-lg font-medium hover:text-gray-400 transition">Games</a>
-      <a href="#skills" class="text-lg font-medium hover:text-gray-400 transition">Skills</a>
-      <a href="#contact" class="text-lg font-medium hover:text-gray-400 transition">Contact</a>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="min-h-screen flex flex-col items-center justify-center px-4 py-20">
-      <div class="text-center max-w-5xl">
-        <h1 class="hero-title text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-6 md:mb-8 gradient-text">
-          Taco Dev Portfolio
-        </h1>
-        <div
-          id="typing-text"
-          class="hero-subtitle text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-semibold mb-8 md:mb-12 h-16 md:h-20 typing-cursor"
-        ></div>
-        <button
-          onclick="scrollToSection('work')"
-          class="px-6 py-3 md:px-8 md:py-4 bg-white text-black font-semibold rounded-full hover:bg-gray-200 transition-all duration-300 transform hover:scale-110 active:scale-95 text-sm md:text-base"
+      <div
+        id="mobile-menu"
+        class="mobile-nav fixed inset-0 z-40 flex flex-col items-center justify-center"
+      >
+        <a
+          href="#about"
+          onclick="toggleMobileMenu()"
+          class="text-3xl font-semibold mb-8 hover:text-gray-400 transition neon-text"
+          >About</a
         >
-          See my work
-        </button>
-      </div>
-    </section>
-
-    <!-- About Me Section -->
-    <section id="about" class="min-h-screen py-12 md:py-20 px-4 fade-in">
-      <div class="max-w-6xl mx-auto">
-        <h2 class="section-title text-3xl md:text-4xl lg:text-5xl font-bold mb-8 md:mb-16 text-center">About Me</h2>
-        <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
-          <div class="order-2 md:order-1">
-            <div class="w-48 h-48 md:w-64 md:h-64 mx-auto bg-gray-800 rounded-full overflow-hidden border-4 border-gray-700 shadow-2xl">
-              <img
-                src="https://i.ibb.co/gb3cWFzV/D49-C486-A-BD1-D-4664-B6-A2-5-D04080-CFABA.png"
-                alt="Profile"
-                class="w-full h-full object-cover"
-              />
-            </div>
-          </div>
-          <div class="order-1 md:order-2">
-            <p class="text-base md:text-lg lg:text-xl text-gray-300 mb-6 leading-relaxed">
-              I'm a NERD, programmer - discord bots and my stuff, Roblox
-              developer specializing in networking, and working with the Roblox
-              API. I also focus on game systems, automation, and integrations
-              with external APIs to create connected experiences. I'm passionate
-              about creating moderation bots as well as complex bots integrated
-              with various APIs or connected to the game through REST APIs and
-              other systems. Learning machine engineering - C++, C
-            </p>
-            <div class="space-y-3 md:space-y-4">
-              <div class="border-l-4 border-gray-600 pl-3 md:pl-4 hover:border-white transition-colors">
-                <h3 class="font-semibold text-base md:text-lg">2021</h3>
-                <p class="text-gray-400 text-sm md:text-base">
-                  I started working in Roblox Studio and began learning Python.
-                </p>
-              </div>
-              <div class="border-l-4 border-gray-600 pl-3 md:pl-4 hover:border-white transition-colors">
-                <h3 class="font-semibold text-base md:text-lg">2022</h3>
-                <p class="text-gray-400 text-sm md:text-base">
-                  Created my first advanced Discord bot for an ER:LC roleplay
-                  server and started learning LuaU
-                </p>
-              </div>
-              <div class="border-l-4 border-gray-600 pl-3 md:pl-4 hover:border-white transition-colors">
-                <h3 class="font-semibold text-base md:text-lg">2023</h3>
-                <p class="text-gray-400 text-sm md:text-base">
-                  First projects in Luau and became part of the roblox developer
-                  community.
-                </p>
-              </div>
-              <div class="border-l-4 border-white pl-3 md:pl-4 shadow-lg">
-                <h3 class="font-semibold text-base md:text-lg">2024–2025</h3>
-                <p class="text-gray-300 text-sm md:text-base">
-                  Gained a lot of experience (contributing to czech
-                  RPs, Contributed as a developer to a Roblox game that reached
-                  over 2 million visits.) started creating open-source projects
-                  (Roblox systems, desktop apps, Python libraries).
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- My Work Section -->
-    <section id="work" class="min-h-screen py-12 md:py-20 px-4 bg-gray-950 fade-in">
-      <div class="max-w-7xl mx-auto">
-        <h2 class="section-title text-3xl md:text-4xl lg:text-5xl font-bold mb-8 md:mb-16 text-center">
-          Some of my assets mainly you can find their source on my GitHub.
-        </h2>
-        <div
-          id="projects-grid"
-          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
+        <a
+          href="#work"
+          onclick="toggleMobileMenu()"
+          class="text-3xl font-semibold mb-8 hover:text-gray-400 transition neon-text"
+          >Work</a
         >
-          <!-- Projects will be inserted here by JavaScript -->
-        </div>
-      </div>
-    </section>
-
-    <!-- Past Works Section -->
-    <section id="past-works" class="min-h-screen py-12 md:py-20 px-4 fade-in bg-gray-900">
-      <div class="max-w-7xl mx-auto">
-        <h2 class="section-title text-3xl md:text-4xl lg:text-5xl font-bold mb-8 md:mb-16 text-center">Past Works - Games</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          <!-- Game Card 1 -->
-          <div class="bg-gray-800 rounded-xl overflow-hidden hover:shadow-2xl transition-all">
-            
-              href="https://www.roblox.com/games/16841862338/Senec-County-Slovakia"
-              target="_blank"
-              class="block"
-            >
-              <img
-                src="https://i.ibb.co/1tRzwG7K/21-DBDF36-71-FF-4-C41-BC65-88669-C13-AF1-F.png"
-                alt="Senec"
-                class="w-full h-40 md:h-48 object-cover transition-transform hover:scale-105"
-                loading="lazy"
-              />
-              <div class="p-4 md:p-6 text-center">
-                <h3 class="text-lg md:text-xl font-semibold mb-2">Senec County RP</h3>
-                <p class="text-gray-400 text-xs md:text-sm mb-2">Visits: 1.8M+</p>
-                <p class="text-gray-400 text-xs md:text-sm">I did here high quality RP assets, highly modular key fob or other assets for an a-chassis system.</p>
-              </div>
-            </a>
-          </div>
-
-          <!-- Game Card 2 -->
-          <div class="bg-gray-800 rounded-xl overflow-hidden hover:shadow-2xl transition-all">
-            
-              href="https://www.roblox.com/games/16897965419/Czech-Realm-RP"
-              target="_blank"
-              class="block"
-            >
-              <img
-                src="https://i.ibb.co/5gn4kNZG/F97-B2-BC2-6008-4-D74-916-C-09944197-DAF9.png"
-                alt="Czech Realm"
-                class="w-full h-40 md:h-48 object-cover transition-transform hover:scale-105"
-                loading="lazy"
-              />
-              <div class="p-4 md:p-6 text-center">
-                <h3 class="text-lg md:text-xl font-semibold mb-2">Czech Realm</h3>
-                <p class="text-gray-400 text-xs md:text-sm mb-2">Visits: 500,000+</p>
-                <p class="text-gray-400 text-xs md:text-sm">I did here high quality RP assets. Working with API and node.js, working with rojo or our external managing systems.</p>
-              </div>
-            </a>
-          </div>
-
-          <!-- Game Card 3 -->
-          <div class="bg-gray-800 rounded-xl overflow-hidden hover:shadow-2xl transition-all">
-            <a href="#" target="_blank" class="block">
-              <img
-                src="https://i.ibb.co/fdJXhmz1/BDD5-DFC0-DD56-4-F29-958-B-FB73245-B9347.png"
-                alt="Czech Zone"
-                class="w-full h-40 md:h-48 object-cover transition-transform hover:scale-105"
-                loading="lazy"
-              />
-              <div class="p-4 md:p-6 text-center">
-                <h3 class="text-lg md:text-xl font-semibold mb-2">Czech Zone</h3>
-                <p class="text-gray-400 text-xs md:text-sm mb-2">There wasn't much here, it was on the white list...</p>
-                <p class="text-gray-400 text-xs md:text-sm">I did here high quality RP assets. Working with API and node.js</p>
-              </div>
-            </a>
-          </div>
-
-          <!-- Game Card 4 -->
-          <div class="bg-gray-800 rounded-xl overflow-hidden hover:shadow-2xl transition-all">
-            <a href="#" target="_blank" class="block">
-              <img
-                src="https://i.ibb.co/cS31RFZX/F344-C885-5-BDB-40-D3-BA6-B-ECE17-EFE2-AE3.png"
-                alt="BrainRot Battles"
-                class="w-full h-40 md:h-48 object-cover transition-transform hover:scale-105"
-                loading="lazy"
-              />
-              <div class="p-4 md:p-6 text-center">
-                <h3 class="text-lg md:text-xl font-semibold mb-2">BrainRot Battles</h3>
-                <p class="text-gray-400 text-xs md:text-sm">Visits: 500,000+</p>
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Skills Section -->
-    <section id="skills" class="min-h-screen py-12 md:py-20 px-4 fade-in">
-      <div class="max-w-6xl mx-auto">
-        <h2 class="section-title text-3xl md:text-4xl lg:text-5xl font-bold mb-8 md:mb-16 text-center">Skills & Stack</h2>
-        <div
-          id="skills-grid"
-          class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8 mb-16"
+        <a
+          href="#past-works"
+          onclick="toggleMobileMenu()"
+          class="text-3xl font-semibold mb-8 hover:text-gray-400 transition neon-text"
+          >Games</a
         >
-          <!-- Skills will be inserted here by JavaScript -->
-        </div>
+        <a
+          href="#skills"
+          onclick="toggleMobileMenu()"
+          class="text-3xl font-semibold mb-8 hover:text-gray-400 transition neon-text"
+          >Skills</a
+        >
+        <a
+          href="#contact"
+          onclick="toggleMobileMenu()"
+          class="text-3xl font-semibold hover:text-gray-400 transition neon-text"
+          >Contact</a
+        >
       </div>
-    </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="min-h-screen py-12 md:py-20 px-4 bg-gray-950 fade-in">
-      <div class="max-w-4xl mx-auto text-center">
-        <h2 class="section-title text-3xl md:text-4xl lg:text-5xl font-bold mb-8 md:mb-16">Get In Touch</h2>
-        <p class="text-lg md:text-xl text-gray-300 mb-8 md:mb-12 px-4">
-          Do you think your project is interesting? DM me!
-        </p>
-        <div class="flex justify-center gap-6 md:gap-8 flex-wrap">
-          
-            href="https://github.com/D-M-dev"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="social-icon w-14 h-14 md:w-16 md:h-16 bg-gray-900 rounded-full flex items-center justify-center text-2xl relative z-10"
-            aria-label="GitHub"
+      <!-- Desktop Navigation -->
+      <nav class="hidden md:flex fixed top-0 right-0 p-8 z-50 gap-6">
+        <a
+          href="#about"
+          class="text-lg font-medium hover:text-gray-400 transition"
+          >About</a
+        >
+        <a
+          href="#work"
+          class="text-lg font-medium hover:text-gray-400 transition"
+          >Work</a
+        >
+        <a
+          href="#past-works"
+          class="text-lg font-medium hover:text-gray-400 transition"
+          >Games</a
+        >
+        <a
+          href="#skills"
+          class="text-lg font-medium hover:text-gray-400 transition"
+          >Skills</a
+        >
+        <a
+          href="#contact"
+          class="text-lg font-medium hover:text-gray-400 transition"
+          >Contact</a
+        >
+      </nav>
+
+      <!-- Hero Section -->
+      <section
+        class="min-h-screen flex flex-col items-center justify-center px-4 py-20 relative"
+      >
+        <div id="particles"></div>
+        <div class="text-center max-w-5xl">
+          <h1
+            class="hero-title text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-6 md:mb-8 gradient-text glitch float"
+            data-text="Taco Dev Portfolio"
           >
-            <svg class="w-7 h-7 md:w-8 md:h-8 fill-current" viewBox="0 0 24 24">
-              <path
-                d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"
-              />
-            </svg>
-          </a>
-          
-            href="https://www.roblox.com/users/2488479952/profile"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="social-icon w-14 h-14 md:w-16 md:h-16 bg-gray-900 rounded-full flex items-center justify-center text-2xl relative z-10"
-            aria-label="Roblox"
-          >
-            <svg class="w-7 h-7 md:w-8 md:h-8 fill-current" viewBox="0 0 24 24">
-              <path
-                d="M18.926 23.998L0 18.892 5.075.002 24 5.108 18.926 24zM15.348 10.09l-5.282-1.453-1.414 5.273 5.282 1.453 1.414-5.273z"
-              />
-            </svg>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- Project Modal -->
-    <div
-      id="project-modal"
-      class="modal fixed inset-0 bg-black bg-opacity-95 items-center justify-center p-4 z-50"
-      onclick="handleModalClick(event)"
-    >
-      <div class="modal-content bg-gray-900 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-        <div class="relative">
+            Taco Dev Portfolio
+          </h1>
+          <div
+            id="typing-text"
+            class="hero-subtitle text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-semibold mb-8 md:mb-12 h-16 md:h-20 typing-cursor"
+          ></div>
           <button
-            onclick="closeModal()"
-            class="absolute top-2 right-2 md:top-4 md:right-4 w-8 h-8 md:w-10 md:h-10 bg-white text-black rounded-full hover:bg-gray-200 transition-colors z-10 flex items-center justify-center text-xl md:text-2xl font-bold"
-            aria-label="Close modal"
+            onclick="scrollToSection('work')"
+            class="btn-hero px-6 py-3 md:px-8 md:py-4 bg-white text-black font-semibold rounded-full hover:bg-gray-200 transition-all duration-300 transform hover:scale-110 active:scale-95 text-sm md:text-base shadow-lg"
           >
-            ✕
+            See my work
           </button>
-          <img
-            id="modal-image"
-            src=""
-            alt=""
-            class="w-full h-48 md:h-64 object-cover rounded-t-xl"
-          />
         </div>
-        <div class="p-4 md:p-8">
-          <h3 id="modal-title" class="text-2xl md:text-3xl font-bold mb-3 md:mb-4"></h3>
-          <p id="modal-description" class="text-gray-300 text-sm md:text-lg mb-4 md:mb-6"></p>
-          <div id="modal-tech" class="flex flex-wrap gap-2 md:gap-3 mb-4 md:mb-6"></div>
-          <div id="modal-video"></div>
+      </section>
+
+      <!-- About Me Section -->
+      <section id="about" class="min-h-screen py-12 md:py-20 px-4 fade-in">
+        <div class="max-w-6xl mx-auto">
+          <h2
+            class="section-title text-3xl md:text-4xl lg:text-5xl font-bold mb-8 md:mb-16 text-center reveal-text"
+          >
+            About Me
+          </h2>
+          <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+            <div class="order-2 md:order-1 slide-in-left">
+              <div
+                class="w-48 h-48 md:w-64 md:h-64 mx-auto bg-gray-800 rounded-full overflow-hidden border-4 border-gray-700 shadow-2xl float card-3d"
+              >
+                <img
+                  src="https://i.ibb.co/gb3cWFzV/D49-C486-A-BD1-D-4664-B6-A2-5-D04080-CFABA.png"
+                  alt="Profile"
+                  class="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+            <div class="order-1 md:order-2 slide-in-right">
+              <p
+                class="text-base md:text-lg lg:text-xl text-gray-300 mb-6 leading-relaxed"
+              >
+                I'm a NERD, programmer - discord bots and my stuff, Roblox
+                developer specializing in networking, and working with the
+                Roblox API. I also focus on game systems, automation, and
+                integrations with external APIs to create connected experiences.
+                I'm passionate about creating moderation bots as well as complex
+                bots integrated with various APIs or connected to the game
+                through REST APIs and other systems. Learning machine
+                engineering - C++, C
+              </p>
+              <div class="space-y-3 md:space-y-4">
+                <div
+                  class="timeline-item hover:pl-6 transition-all duration-300"
+                >
+                  <h3 class="font-semibold text-base md:text-lg">2021</h3>
+                  <p class="text-gray-400 text-sm md:text-base">
+                    I started working in Roblox Studio and began learning
+                    Python.
+                  </p>
+                </div>
+                <div
+                  class="timeline-item hover:pl-6 transition-all duration-300"
+                >
+                  <h3 class="font-semibold text-base md:text-lg">2022</h3>
+                  <p class="text-gray-400 text-sm md:text-base">
+                    Created my first advanced Discord bot for an ER:LC roleplay
+                    server and started learning LuaU
+                  </p>
+                </div>
+                <div
+                  class="timeline-item hover:pl-6 transition-all duration-300"
+                >
+                  <h3 class="font-semibold text-base md:text-lg">2023</h3>
+                  <p class="text-gray-400 text-sm md:text-base">
+                    First projects in Luau and became part of the roblox
+                    developer community.
+                  </p>
+                </div>
+                <div
+                  class="timeline-item hover:pl-6 transition-all duration-300"
+                >
+                  <h3 class="font-semibold text-base md:text-lg">2024–2025</h3>
+                  <p class="text-gray-300 text-sm md:text-base">
+                    Gained a lot of experience (contributing to czech RPs,
+                    Contributed as a developer to a Roblox game that reached
+                    over 2 million visits.) started creating open-source
+                    projects (Roblox systems, desktop apps, Python libraries).
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- My Work Section -->
+      <section
+        id="work"
+        class="min-h-screen py-12 md:py-20 px-4 holographic fade-in"
+      >
+        <div class="max-w-7xl mx-auto">
+          <h2
+            class="section-title text-3xl md:text-4xl lg:text-5xl font-bold mb-8 md:mb-16 text-center reveal-text"
+          >
+            Some of my assets mainly you can find their source on my GitHub.
+          </h2>
+          <div
+            id="projects-grid"
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
+          >
+            <!-- Projects will be inserted here by JavaScript -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Past Works Section -->
+      <section id="past-works" class="min-h-screen py-12 md:py-20 px-4 fade-in">
+        <div class="max-w-7xl mx-auto">
+          <h2
+            class="section-title text-3xl md:text-4xl lg:text-5xl font-bold mb-8 md:mb-16 text-center reveal-text"
+          >
+            Past Works - Games
+          </h2>
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
+          >
+            <!-- Game Card 1 -->
+            <div
+              class="bg-gray-800 rounded-xl overflow-hidden hover:shadow-2xl transition-all card-3d holographic"
+            >
+              <a
+                href="https://www.roblox.com/games/16841862338/Senec-County-Slovakia"
+                target="_blank"
+                class="block"
+              >
+                <img
+                  src="https://i.ibb.co/1tRzwG7K/21-DBDF36-71-FF-4-C41-BC65-88669-C13-AF1-F.png"
+                  alt="Senec"
+                  class="w-full h-40 md:h-48 object-cover transition-transform hover:scale-105"
+                  loading="lazy"
+                />
+                <div class="p-4 md:p-6 text-center">
+                  <h3 class="text-lg md:text-xl font-semibold mb-2">
+                    Senec County RP
+                  </h3>
+                  <p class="text-gray-400 text-xs md:text-sm mb-2">
+                    Visits: 1.8M+
+                  </p>
+                  <p class="text-gray-400 text-xs md:text-sm">
+                    I did here high quality RP assets, highly modular key fob or
+                    other assets for an a-chassis system.
+                  </p>
+                </div>
+              </a>
+            </div>
+
+            <!-- Game Card 2 -->
+            <div
+              class="bg-gray-800 rounded-xl overflow-hidden hover:shadow-2xl transition-all card-3d holographic"
+            >
+              <a
+                href="https://www.roblox.com/games/16897965419/Czech-Realm-RP"
+                target="_blank"
+                class="block"
+              >
+                <img
+                  src="https://i.ibb.co/5gn4kNZG/F97-B2-BC2-6008-4-D74-916-C-09944197-DAF9.png"
+                  alt="Czech Realm"
+                  class="w-full h-40 md:h-48 object-cover transition-transform hover:scale-105"
+                  loading="lazy"
+                />
+                <div class="p-4 md:p-6 text-center">
+                  <h3 class="text-lg md:text-xl font-semibold mb-2">
+                    Czech Realm
+                  </h3>
+                  <p class="text-gray-400 text-xs md:text-sm mb-2">
+                    Visits: 500,000+
+                  </p>
+                  <p class="text-gray-400 text-xs md:text-sm">
+                    I did here high quality RP assets. Working with API and
+                    node.js, working with rojo or our external managing systems.
+                  </p>
+                </div>
+              </a>
+            </div>
+
+            <!-- Game Card 3 -->
+            <div
+              class="bg-gray-800 rounded-xl overflow-hidden hover:shadow-2xl transition-all card-3d holographic"
+            >
+              <a href="#" target="_blank" class="block">
+                <img
+                  src="https://i.ibb.co/fdJXhmz1/BDD5-DFC0-DD56-4-F29-958-B-FB73245-B9347.png"
+                  alt="Czech Zone"
+                  class="w-full h-40 md:h-48 object-cover transition-transform hover:scale-105"
+                  loading="lazy"
+                />
+                <div class="p-4 md:p-6 text-center">
+                  <h3 class="text-lg md:text-xl font-semibold mb-2">
+                    Czech Zone
+                  </h3>
+                  <p class="text-gray-400 text-xs md:text-sm mb-2">
+                    There wasn't much here, it was on the white list...
+                  </p>
+                  <p class="text-gray-400 text-xs md:text-sm">
+                    I did here high quality RP assets. Working with API and
+                    node.js
+                  </p>
+                </div>
+              </a>
+            </div>
+
+            <!-- Game Card 4 -->
+            <div
+              class="bg-gray-800 rounded-xl overflow-hidden hover:shadow-2xl transition-all card-3d holographic"
+            >
+              <a href="#" target="_blank" class="block">
+                <img
+                  src="https://i.ibb.co/cS31RFZX/F344-C885-5-BDB-40-D3-BA6-B-ECE17-EFE2-AE3.png"
+                  alt="BrainRot Battles"
+                  class="w-full h-40 md:h-48 object-cover transition-transform hover:scale-105"
+                  loading="lazy"
+                />
+                <div class="p-4 md:p-6 text-center">
+                  <h3 class="text-lg md:text-xl font-semibold mb-2">
+                    BrainRot Battles
+                  </h3>
+                  <p class="text-gray-400 text-xs md:text-sm">
+                    Visits: 500,000+
+                  </p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Skills Section -->
+      <section
+        id="skills"
+        class="min-h-screen py-12 md:py-20 px-4 fade-in holographic"
+      >
+        <div class="max-w-6xl mx-auto">
+          <h2
+            class="section-title text-3xl md:text-4xl lg:text-5xl font-bold mb-8 md:mb-16 text-center reveal-text"
+          >
+            Skills & Stack
+          </h2>
+          <div
+            id="skills-grid"
+            class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8 mb-16"
+          >
+            <!-- Skills will be inserted here by JavaScript -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact Section -->
+      <section id="contact" class="min-h-screen py-12 md:py-20 px-4 fade-in">
+        <div class="max-w-4xl mx-auto text-center">
+          <h2
+            class="section-title text-3xl md:text-4xl lg:text-5xl font-bold mb-8 md:mb-16 reveal-text"
+          >
+            Get In Touch
+          </h2>
+          <p class="text-lg md:text-xl text-gray-300 mb-8 md:mb-12 px-4">
+            Do you think your project is interesting? DM me!
+          </p>
+          <div class="flex justify-center gap-6 md:gap-8 flex-wrap">
+            <a
+              href="https://github.com/D-M-dev"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="social-icon w-14 h-14 md:w-16 md:h-16 bg-gray-900 rounded-full flex items-center justify-center text-2xl relative z-10"
+              aria-label="GitHub"
+            >
+              <svg
+                class="w-7 h-7 md:w-8 md:h-8 fill-current"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"
+                />
+              </svg>
+            </a>
+            <a
+              href="https://www.roblox.com/users/2488479952/profile"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="social-icon w-14 h-14 md:w-16 md:h-16 bg-gray-900 rounded-full flex items-center justify-center text-2xl relative z-10"
+              aria-label="Roblox"
+            >
+              <svg
+                class="w-7 h-7 md:w-8 md:h-8 fill-current"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M18.926 23.998L0 18.892 5.075.002 24 5.108 18.926 24zM15.348 10.09l-5.282-1.453-1.414 5.273 5.282 1.453 1.414-5.273z"
+                />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Project Modal -->
+      <div
+        id="project-modal"
+        class="modal fixed inset-0 bg-black bg-opacity-95 items-center justify-center p-4 z-50"
+        onclick="handleModalClick(event)"
+      >
+        <div
+          class="modal-content bg-gray-900 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto holographic"
+        >
+          <div class="relative">
+            <button
+              onclick="closeModal()"
+              class="absolute top-2 right-2 md:top-4 md:right-4 w-8 h-8 md:w-10 md:h-10 bg-white text-black rounded-full hover:bg-gray-200 transition-colors z-10 flex items-center justify-center text-xl md:text-2xl font-bold"
+              aria-label="Close modal"
+            >
+              ✕
+            </button>
+            <img
+              id="modal-image"
+              src=""
+              alt=""
+              class="w-full h-48 md:h-64 object-cover rounded-t-xl"
+            />
+          </div>
+          <div class="p-4 md:p-8">
+            <h3
+              id="modal-title"
+              class="text-2xl md:text-3xl font-bold mb-3 md:mb-4"
+            ></h3>
+            <p
+              id="modal-description"
+              class="text-gray-300 text-sm md:text-lg mb-4 md:mb-6"
+            ></p>
+            <div
+              id="modal-tech"
+              class="flex flex-wrap gap-2 md:gap-3 mb-4 md:mb-6"
+            ></div>
+            <div id="modal-video"></div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Footer -->
-    <footer class="py-6 md:py-8 text-center text-gray-500 border-t border-gray-900">
-      <p class="text-sm md:text-base">Made by taco, source on my GitHub.</p>
-    </footer>
+      <!-- Footer -->
+      <footer
+        class="py-6 md:py-8 text-center text-gray-500 border-t border-gray-900"
+      >
+        <p class="text-sm md:text-base">Made by taco, source on my GitHub.</p>
+      </footer>
+    </div>
 
     <script>
+      // 3D Background with Three.js
+      function init3DBackground() {
+        const container = document.getElementById("canvas-container");
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(
+          75,
+          window.innerWidth / window.innerHeight,
+          0.1,
+          1000
+        );
+        const renderer = new THREE.WebGLRenderer({
+          alpha: true,
+          antialias: true,
+        });
+
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        container.appendChild(renderer.domElement);
+
+        // Create particles
+        const geometry = new THREE.BufferGeometry();
+        const vertices = [];
+        const particleCount = 1000;
+
+        for (let i = 0; i < particleCount; i++) {
+          vertices.push(
+            Math.random() * 2000 - 1000,
+            Math.random() * 2000 - 1000,
+            Math.random() * 2000 - 1000
+          );
+        }
+
+        geometry.setAttribute(
+          "position",
+          new THREE.Float32BufferAttribute(vertices, 3)
+        );
+
+        const material = new THREE.PointsMaterial({
+          color: 0xffffff,
+          size: 2,
+          transparent: true,
+          opacity: 0.6,
+        });
+
+        const particles = new THREE.Points(geometry, material);
+        scene.add(particles);
+
+        camera.position.z = 500;
+
+        // Mouse interaction
+        let mouseX = 0;
+        let mouseY = 0;
+
+        document.addEventListener("mousemove", (event) => {
+          mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+          mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+        });
+
+        // Animation
+        function animate() {
+          requestAnimationFrame(animate);
+
+          particles.rotation.x += 0.0001;
+          particles.rotation.y += 0.0002;
+
+          // Follow mouse
+          camera.position.x += (mouseX * 50 - camera.position.x) * 0.05;
+          camera.position.y += (mouseY * 50 - camera.position.y) * 0.05;
+          camera.lookAt(scene.position);
+
+          renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // Handle window resize
+        window.addEventListener("resize", () => {
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+      }
+
+      // Initialize 3D background
+      init3DBackground();
+
+      // Create floating particles
+      function createParticles() {
+        const particlesContainer = document.getElementById("particles");
+        const particleCount = 50;
+
+        for (let i = 0; i < particleCount; i++) {
+          const particle = document.createElement("div");
+          particle.className = "particle";
+          particle.style.width = Math.random() * 3 + 1 + "px";
+          particle.style.height = particle.style.width;
+          particle.style.left = Math.random() * 100 + "%";
+          particle.style.animationDelay = Math.random() * 6 + "s";
+          particle.style.animationDuration = Math.random() * 3 + 3 + "s";
+          particlesContainer.appendChild(particle);
+        }
+      }
+
+      createParticles();
+
       // Loading screen
-      window.addEventListener('load', () => {
+      window.addEventListener("load", () => {
         setTimeout(() => {
-          document.getElementById('loading').classList.add('hidden');
-        }, 500);
+          document.getElementById("loading").classList.add("hidden");
+        }, 1000);
       });
 
       // Scroll indicator
-      window.addEventListener('scroll', () => {
-        const scrollIndicator = document.getElementById('scroll-indicator');
-        const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      window.addEventListener("scroll", () => {
+        const scrollIndicator = document.getElementById("scroll-indicator");
+        const windowHeight =
+          document.documentElement.scrollHeight -
+          document.documentElement.clientHeight;
         const scrolled = (window.scrollY / windowHeight) * 100;
         scrollIndicator.style.transform = `scaleX(${scrolled / 100})`;
       });
 
       // Mobile menu toggle
       function toggleMobileMenu() {
-        const menu = document.getElementById('mobile-menu');
-        const hamburger = document.querySelector('.hamburger');
-        menu.classList.toggle('active');
-        hamburger.classList.toggle('active');
+        const menu = document.getElementById("mobile-menu");
+        const hamburger = document.querySelector(".hamburger");
+        menu.classList.toggle("active");
+        hamburger.classList.toggle("active");
       }
 
       // Typing animation
@@ -722,33 +1324,48 @@
       function scrollToSection(sectionId) {
         const element = document.getElementById(sectionId);
         element.scrollIntoView({ behavior: "smooth" });
-        
-        // Close mobile menu if open
-        const menu = document.getElementById('mobile-menu');
-        const hamburger = document.querySelector('.hamburger');
-        if (menu.classList.contains('active')) {
-          menu.classList.remove('active');
-          hamburger.classList.remove('active');
+
+        const menu = document.getElementById("mobile-menu");
+        const hamburger = document.querySelector(".hamburger");
+        if (menu.classList.contains("active")) {
+          menu.classList.remove("active");
+          hamburger.classList.remove("active");
         }
       }
 
-      // Intersection Observer for fade-in animations
+      // Enhanced Intersection Observer
       const observerOptions = {
         threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
+        rootMargin: "0px 0px -50px 0px",
       };
 
       const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add("fade-in-visible");
+
+            // Additional animations
+            if (
+              entry.target.classList.contains("slide-in-left") ||
+              entry.target.classList.contains("slide-in-right")
+            ) {
+              entry.target.classList.add("visible");
+            }
+
+            if (entry.target.classList.contains("reveal-text")) {
+              entry.target.classList.add("visible");
+            }
           }
         });
       }, observerOptions);
 
-      document.querySelectorAll(".fade-in").forEach((el) => {
-        observer.observe(el);
-      });
+      document
+        .querySelectorAll(
+          ".fade-in, .slide-in-left, .slide-in-right, .reveal-text"
+        )
+        .forEach((el) => {
+          observer.observe(el);
+        });
 
       // Projects data
       const projects = [
@@ -850,19 +1467,18 @@
           tech: ["Lua", "Roblox", "Sys"],
           video: null,
         },
-
         {
           id: 11,
           title: "Chunk loader engine",
           image:
             "https://i.ibb.co/pB9GPD6w/F51-C595-F-0-F3-A-4011-A582-AA8-F6304-E010.png",
-          description: "A fully modular chunk loading engine for Roblox that allows for dynamic loading of large game worlds with advanced optimization and management features, source on my github",
+          description:
+            "A fully modular chunk loading engine for Roblox that allows for dynamic loading of large game worlds with advanced optimization and management features, source on my github",
           tech: ["Luau"],
           video: null,
         },
-        
         {
-          id: 11,
+          id: 12,
           title: "Server Lister with Flags",
           image:
             "https://i.ibb.co/hFcjYvmb/BA033059-A59-A-4-A49-B86-F-863-D74-B98-AC3.png",
@@ -871,7 +1487,7 @@
           video: null,
         },
         {
-          id: 12,
+          id: 13,
           title: "Discord Ticket Bot",
           image:
             "https://i.ibb.co/PsNnLV6H/EB99-CCBC-6-B20-4-A8-E-8050-6504068048-E7.png",
@@ -881,7 +1497,7 @@
           video: null,
         },
         {
-          id: 13,
+          id: 14,
           title: "Discord-Roblox Moderation Bot",
           image:
             "https://i.ibb.co/fzb1QW1m/7-FD8-DCF1-F4-B8-4-A86-AF08-CAC12-A24-FCC0.png",
@@ -891,7 +1507,7 @@
           video: null,
         },
         {
-          id: 14,
+          id: 15,
           title: "TeleportManager",
           image:
             "https://i.ibb.co/27VPm8FB/24-E774-A3-05-B4-41-F0-8888-45157734-F3-CA.png",
@@ -900,7 +1516,7 @@
           video: null,
         },
         {
-          id: 15,
+          id: 16,
           title: "This Web",
           image: "",
           description: "XD, I have to put this there.",
@@ -908,7 +1524,7 @@
           video: null,
         },
         {
-          id: 16,
+          id: 17,
           title: "Custom API Wrapper",
           image: "",
           description:
@@ -917,7 +1533,7 @@
           video: null,
         },
         {
-          id: 17,
+          id: 18,
           title: "FL4gs",
           image: "",
           description:
@@ -926,7 +1542,7 @@
           video: null,
         },
         {
-          id: 18,
+          id: 19,
           title: "Trello-Discord-Roblox Integration",
           image: "",
           description:
@@ -938,11 +1554,7 @@
 
       // Skills data
       const skills = [
-        {
-          name: "Luau",
-          icon: "🎮",
-          level: 100,
-        },
+        { name: "Luau", icon: "🎮", level: 100 },
         { name: "Python", icon: "🐍", level: 100 },
         { name: "JavaScript/Node.js", icon: "⚡", level: 85 },
         { name: "Roblox Studio", icon: "🎨", level: 100 },
@@ -953,39 +1565,45 @@
 
       // Render projects
       const projectsGrid = document.getElementById("projects-grid");
-      projects.forEach((project) => {
+      projects.forEach((project, index) => {
         const projectCard = document.createElement("div");
         projectCard.className =
-          "project-card bg-gray-900 rounded-xl overflow-hidden cursor-pointer";
+          "project-card bg-gray-900 rounded-xl overflow-hidden cursor-pointer holographic";
+        projectCard.style.animationDelay = `${index * 0.1}s`;
         projectCard.onclick = () => openModal(project);
 
         projectCard.innerHTML = `
-                <div class="overflow-hidden h-40 md:h-48">
-                    <img
-                        src="${project.image || 'https://via.placeholder.com/400x300/1f2937/ffffff?text=Project'}"
-                        alt="${project.title}"
-                        class="project-image w-full h-full object-cover"
-                        loading="lazy"
-                    />
-                </div>
-                <div class="p-4 md:p-6">
-                    <h3 class="text-lg md:text-xl font-semibold mb-2">${project.title}</h3>
-                    <p class="text-gray-400 text-xs md:text-sm mb-3 md:mb-4 line-clamp-3">${
-                      project.description
-                    }</p>
-                    <div class="flex flex-wrap gap-2">
-                        ${project.tech
-                          .map(
-                            (tech) => `
-                            <span class="px-2 md:px-3 py-1 bg-gray-800 text-gray-300 text-xs rounded-full">
-                                ${tech}
-                            </span>
-                        `
-                          )
-                          .join("")}
-                    </div>
-                </div>
-            `;
+          <div class="overflow-hidden h-40 md:h-48">
+            <img
+              src="${
+                project.image ||
+                "https://via.placeholder.com/400x300/1f2937/ffffff?text=Project"
+              }"
+              alt="${project.title}"
+              class="project-image w-full h-full object-cover"
+              loading="lazy"
+            />
+          </div>
+          <div class="p-4 md:p-6">
+            <h3 class="text-lg md:text-xl font-semibold mb-2">${
+              project.title
+            }</h3>
+            <p class="text-gray-400 text-xs md:text-sm mb-3 md:mb-4 line-clamp-3">${
+              project.description
+            }</p>
+            <div class="flex flex-wrap gap-2">
+              ${project.tech
+                .map(
+                  (tech) => `
+                <span class="px-2 md:px-3 py-1 bg-gray-800 text-gray-300 text-xs rounded-full">
+                  ${tech}
+                </span>
+              `
+                )
+                .join("")}
+            </div>
+          </div>
+        `;
 
         projectsGrid.appendChild(projectCard);
       });
@@ -995,57 +1613,62 @@
       skills.forEach((skill, index) => {
         const skillCard = document.createElement("div");
         skillCard.className =
-          "skill-card bg-gray-900 p-4 md:p-6 rounded-xl text-center";
-        
-        // Delayed animation for skills
+          "skill-card bg-gray-900 p-4 md:p-6 rounded-xl text-center holographic";
+
         setTimeout(() => {
-          skillCard.style.opacity = '0';
-          skillCard.style.transform = 'translateY(20px)';
-          skillCard.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-          
+          skillCard.style.opacity = "0";
+          skillCard.style.transform = "translateY(30px)";
+          skillCard.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+
           setTimeout(() => {
-            skillCard.style.opacity = '1';
-            skillCard.style.transform = 'translateY(0)';
+            skillCard.style.opacity = "1";
+            skillCard.style.transform = "translateY(0)";
           }, 50);
         }, index * 100);
 
         skillCard.innerHTML = `
-                <div class="text-3xl md:text-5xl mb-3 md:mb-4">${skill.icon}</div>
-                <h3 class="text-base md:text-xl font-semibold mb-2 md:mb-3">${skill.name}</h3>
-                <div class="bg-gray-800 rounded-full h-2 overflow-hidden">
-                    <div
-                        class="progress-bar bg-white h-full rounded-full"
-                        style="width: 0%"
-                        data-width="${skill.level}"
-                    ></div>
-                </div>
-            `;
+          <div class="text-3xl md:text-5xl mb-3 md:mb-4">${skill.icon}</div>
+          <h3 class="text-base md:text-xl font-semibold mb-2 md:mb-3">${skill.name}</h3>
+          <div class="bg-gray-800 rounded-full h-2 overflow-hidden">
+            <div
+              class="progress-bar bg-white h-full rounded-full"
+              style="width: 0%"
+              data-width="${skill.level}"
+            ></div>
+          </div>
+        `;
 
         skillsGrid.appendChild(skillCard);
       });
 
       // Animate skill bars when visible
-      const skillObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const progressBars = entry.target.querySelectorAll('.progress-bar');
-            progressBars.forEach((bar) => {
-              const width = bar.getAttribute('data-width');
-              setTimeout(() => {
-                bar.style.width = width + '%';
-              }, 200);
-            });
-            skillObserver.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.2 });
+      const skillObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const progressBars =
+                entry.target.querySelectorAll(".progress-bar");
+              progressBars.forEach((bar) => {
+                const width = bar.getAttribute("data-width");
+                setTimeout(() => {
+                  bar.style.width = width + "%";
+                }, 300);
+              });
+              skillObserver.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.2 }
+      );
 
-      skillObserver.observe(document.getElementById('skills-grid'));
+      skillObserver.observe(document.getElementById("skills-grid"));
 
       // Modal functions
       function openModal(project) {
         const modal = document.getElementById("project-modal");
-        document.getElementById("modal-image").src = project.image || 'https://via.placeholder.com/800x400/1f2937/ffffff?text=Project';
+        document.getElementById("modal-image").src =
+          project.image ||
+          "https://via.placeholder.com/800x400/1f2937/ffffff?text=Project";
         document.getElementById("modal-image").alt = project.title;
         document.getElementById("modal-title").textContent = project.title;
         document.getElementById("modal-description").textContent =
@@ -1055,39 +1678,38 @@
         techContainer.innerHTML = project.tech
           .map(
             (tech) => `
-                <span class="px-3 md:px-4 py-1 md:py-2 bg-gray-800 text-gray-200 rounded-full text-xs md:text-sm">
-                    ${tech}
-                </span>
-            `
+          <span class="px-3 md:px-4 py-1 md:py-2 bg-gray-800 text-gray-200 rounded-full text-xs md:text-sm">
+            ${tech}
+          </span>
+        `
           )
           .join("");
 
         const videoContainer = document.getElementById("modal-video");
         if (project.video) {
           videoContainer.innerHTML = `
-                    <video
-                        src="${project.video}"
-                        controls
-                        class="w-full rounded-xl"
-                        loading="lazy"
-                        preload="metadata"
-                    ></video>
-                `;
+            <video
+              src="${project.video}"
+              controls
+              class="w-full rounded-xl"
+              loading="lazy"
+              preload="metadata"
+            ></video>
+          `;
         } else {
           videoContainer.innerHTML = "";
         }
 
         modal.classList.add("active");
-        document.body.style.overflow = 'hidden';
+        document.body.style.overflow = "hidden";
       }
 
       function closeModal() {
         const modal = document.getElementById("project-modal");
         modal.classList.remove("active");
-        document.body.style.overflow = 'auto';
-        
-        // Stop video if playing
-        const video = modal.querySelector('video');
+        document.body.style.overflow = "auto";
+
+        const video = modal.querySelector("video");
         if (video) {
           video.pause();
           video.currentTime = 0;
@@ -1095,25 +1717,27 @@
       }
 
       function handleModalClick(event) {
-        if (event.target.id === 'project-modal') {
+        if (event.target.id === "project-modal") {
           closeModal();
         }
       }
 
-      // Close modal on escape key
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
           closeModal();
         }
       });
 
-      // Prevent scroll on mobile when modal is open
-      document.getElementById('project-modal').addEventListener('touchmove', (e) => {
-        const modalContent = document.querySelector('.modal-content');
-        if (!modalContent.contains(e.target)) {
-          e.preventDefault();
-        }
-      }, { passive: false });
+      document.getElementById("project-modal").addEventListener(
+        "touchmove",
+        (e) => {
+          const modalContent = document.querySelector(".modal-content");
+          if (!modalContent.contains(e.target)) {
+            e.preventDefault();
+          }
+        },
+        { passive: false }
+      );
     </script>
   </body>
 </html>
