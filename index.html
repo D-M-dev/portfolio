@@ -3,12 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Portfolio - Roblox Dev & Programmer</title>
+    <title>Taco Dev - Portfolio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -16,15 +16,102 @@
     <style>
       * {
         font-family: "Poppins", sans-serif;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
       }
 
       body {
-        scroll-behavior: smooth;
-        overflow-x: hidden;
         background: #000;
+        color: #fff;
+        overflow-x: hidden;
+        scroll-behavior: smooth;
+        cursor: none;
       }
 
-      /* 3D Canvas Background */
+      /* Enhanced Custom Cursor System */
+      .cursor-dot {
+        position: fixed;
+        width: 10px;
+        height: 10px;
+        background: #fff;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 10001;
+        mix-blend-mode: difference;
+        transition: width 0.3s ease, height 0.3s ease, background 0.3s ease;
+      }
+
+      .cursor-outline {
+        position: fixed;
+        width: 40px;
+        height: 40px;
+        border: 2px solid #fff;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 10000;
+        mix-blend-mode: difference;
+        transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+      }
+
+      .cursor-trail {
+        position: fixed;
+        width: 5px;
+        height: 5px;
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        animation: trailFade 0.8s ease-out forwards;
+      }
+
+      @keyframes trailFade {
+        to {
+          transform: scale(2);
+          opacity: 0;
+        }
+      }
+
+      .cursor-glow {
+        position: fixed;
+        width: 100px;
+        height: 100px;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.15) 0%,
+          transparent 70%
+        );
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9998;
+        mix-blend-mode: screen;
+        transition: transform 0.2s ease;
+      }
+
+      /* Cursor states */
+      body.cursor-hover .cursor-dot {
+        width: 20px;
+        height: 20px;
+        background: rgba(255, 255, 255, 0.8);
+      }
+
+      body.cursor-hover .cursor-outline {
+        width: 60px;
+        height: 60px;
+        border-width: 3px;
+      }
+
+      body.cursor-click .cursor-dot {
+        width: 5px;
+        height: 5px;
+      }
+
+      body.cursor-click .cursor-outline {
+        width: 30px;
+        height: 30px;
+      }
+
+      /* Enhanced 3D Canvas */
       #canvas-container {
         position: fixed;
         top: 0;
@@ -40,53 +127,171 @@
         z-index: 1;
       }
 
-      /* Particle effect */
+      /* Advanced particle system */
+      .particle-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+      }
+
       .particle {
         position: absolute;
-        background: white;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.8) 0%,
+          transparent 70%
+        );
         border-radius: 50%;
         pointer-events: none;
-        animation: float 6s infinite ease-in-out;
       }
 
-      @keyframes float {
+      /* Magnetic buttons */
+      .magnetic-btn {
+        position: relative;
+        transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+      }
+
+      /* Advanced text effects */
+      .split-text {
+        overflow: hidden;
+        display: inline-block;
+      }
+
+      .split-text span {
+        display: inline-block;
+        opacity: 0;
+        transform: translateY(100%);
+        animation: slideUp 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+      }
+
+      @keyframes slideUp {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Holographic cards */
+      .holo-card {
+        position: relative;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.05) 0%,
+          rgba(255, 255, 255, 0.01) 100%
+        );
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+      }
+
+      .holo-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        padding: 2px;
+        background: linear-gradient(
+          45deg,
+          transparent,
+          rgba(255, 255, 255, 0.3),
+          transparent
+        );
+        -webkit-mask: linear-gradient(#fff 0 0) content-box,
+          linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+      }
+
+      .holo-card:hover::before {
+        opacity: 1;
+        animation: borderRotate 2s linear infinite;
+      }
+
+      @keyframes borderRotate {
+        0% {
+          background-position: 0% 50%;
+        }
+        100% {
+          background-position: 200% 50%;
+        }
+      }
+
+      /* Morphing shapes */
+      .morphing-shape {
+        animation: morph 8s ease-in-out infinite;
+      }
+
+      @keyframes morph {
         0%,
         100% {
-          transform: translateY(0) translateX(0);
-          opacity: 0;
+          border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
         }
-        10% {
-          opacity: 1;
+        25% {
+          border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
         }
-        90% {
-          opacity: 1;
+        50% {
+          border-radius: 50% 60% 30% 60% / 30% 60% 70% 40%;
         }
+        75% {
+          border-radius: 60% 40% 60% 40% / 70% 30% 50% 60%;
+        }
+      }
+
+      /* Text gradient animation */
+      .gradient-text-animated {
+        background: linear-gradient(90deg, #fff, #888, #fff, #888);
+        background-size: 300% 100%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: gradientShift 3s ease infinite;
+      }
+
+      @keyframes gradientShift {
+        0%,
         100% {
-          transform: translateY(-100vh) translateX(50px);
-          opacity: 0;
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
         }
       }
 
-      /* Enhanced Mobile Navigation */
-      .mobile-nav {
-        transform: translateX(-100%);
-        transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        backdrop-filter: blur(20px);
-        background: rgba(0, 0, 0, 0.95);
+      /* Floating elements */
+      .float-element {
+        animation: floatAnimation 6s ease-in-out infinite;
       }
 
-      .mobile-nav.active {
-        transform: translateX(0);
+      @keyframes floatAnimation {
+        0%,
+        100% {
+          transform: translateY(0px) translateX(0px) rotate(0deg);
+        }
+        25% {
+          transform: translateY(-20px) translateX(10px) rotate(2deg);
+        }
+        50% {
+          transform: translateY(-10px) translateX(-10px) rotate(-2deg);
+        }
+        75% {
+          transform: translateY(-25px) translateX(5px) rotate(1deg);
+        }
       }
 
-      /* Glitch effect for hero title */
-      .glitch {
+      /* Glitch effect enhanced */
+      .glitch-text {
         position: relative;
-        animation: glitch-skew 3s infinite;
+        animation: glitch 5s infinite;
       }
 
-      .glitch::before,
-      .glitch::after {
+      .glitch-text::before,
+      .glitch-text::after {
         content: attr(data-text);
         position: absolute;
         top: 0;
@@ -95,327 +300,534 @@
         height: 100%;
       }
 
-      .glitch::before {
-        animation: glitch-anim-1 2s infinite linear alternate-reverse;
-        color: #fff;
+      .glitch-text::before {
+        left: 2px;
         text-shadow: -2px 0 #ff00ff;
-        clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
-      }
-
-      .glitch::after {
+        clip: rect(24px, 550px, 90px, 0);
         animation: glitch-anim-2 3s infinite linear alternate-reverse;
-        color: #fff;
-        text-shadow: 2px 0 #00ffff;
-        clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
       }
 
-      @keyframes glitch-anim-1 {
+      .glitch-text::after {
+        left: -2px;
+        text-shadow: -2px 0 #00ffff;
+        clip: rect(85px, 550px, 140px, 0);
+        animation: glitch-anim 2.5s infinite linear alternate-reverse;
+      }
+
+      @keyframes glitch-anim {
         0% {
-          clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+          clip: rect(61px, 9999px, 90px, 0);
+        }
+        10% {
+          clip: rect(80px, 9999px, 20px, 0);
+        }
+        20% {
+          clip: rect(44px, 9999px, 78px, 0);
+        }
+        30% {
+          clip: rect(31px, 9999px, 69px, 0);
+        }
+        40% {
+          clip: rect(53px, 9999px, 34px, 0);
         }
         50% {
-          clip-path: polygon(0 20%, 100% 20%, 100% 70%, 0 70%);
+          clip: rect(98px, 9999px, 15px, 0);
+        }
+        60% {
+          clip: rect(27px, 9999px, 88px, 0);
+        }
+        70% {
+          clip: rect(72px, 9999px, 41px, 0);
+        }
+        80% {
+          clip: rect(19px, 9999px, 94px, 0);
+        }
+        90% {
+          clip: rect(66px, 9999px, 52px, 0);
         }
         100% {
-          clip-path: polygon(0 40%, 100% 40%, 100% 90%, 0 90%);
+          clip: rect(38px, 9999px, 73px, 0);
         }
       }
 
       @keyframes glitch-anim-2 {
         0% {
-          clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
-        }
-        50% {
-          clip-path: polygon(0 30%, 100% 30%, 100% 80%, 0 80%);
-        }
-        100% {
-          clip-path: polygon(0 10%, 100% 10%, 100% 60%, 0 60%);
-        }
-      }
-
-      @keyframes glitch-skew {
-        0% {
-          transform: skew(0deg);
+          clip: rect(91px, 9999px, 30px, 0);
         }
         10% {
-          transform: skew(-2deg);
+          clip: rect(12px, 9999px, 77px, 0);
         }
         20% {
-          transform: skew(2deg);
+          clip: rect(58px, 9999px, 45px, 0);
         }
         30% {
-          transform: skew(0deg);
+          clip: rect(23px, 9999px, 89px, 0);
         }
+        40% {
+          clip: rect(67px, 9999px, 14px, 0);
+        }
+        50% {
+          clip: rect(84px, 9999px, 56px, 0);
+        }
+        60% {
+          clip: rect(35px, 9999px, 92px, 0);
+        }
+        70% {
+          clip: rect(49px, 9999px, 28px, 0);
+        }
+        80% {
+          clip: rect(76px, 9999px, 61px, 0);
+        }
+        90% {
+          clip: rect(21px, 9999px, 83px, 0);
+        }
+        100% {
+          clip: rect(54px, 9999px, 39px, 0);
+        }
+      }
+
+      @keyframes glitch {
+        0%,
+        90%,
         100% {
           transform: skew(0deg);
         }
+        91% {
+          transform: skew(-5deg);
+        }
+        92% {
+          transform: skew(5deg);
+        }
+        93% {
+          transform: skew(-5deg);
+        }
       }
 
-      /* Advanced animations */
-      .fade-in {
+      /* Neon glow effect */
+      .neon-glow {
+        text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #fff;
+        animation: neonPulse 2s ease-in-out infinite;
+      }
+
+      @keyframes neonPulse {
+        0%,
+        100% {
+          text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #fff;
+        }
+        50% {
+          text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff,
+            0 0 40px #fff, 0 0 50px #fff;
+        }
+      }
+
+      /* Scroll progress bar */
+      .scroll-progress {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #fff, #888, #fff);
+        background-size: 200% 100%;
+        transform-origin: left;
+        z-index: 9999;
+        animation: gradientShift 2s linear infinite;
+      }
+
+      /* Loading screen */
+      .loading-screen {
+        position: fixed;
+        inset: 0;
+        background: #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        z-index: 10000;
+        transition: opacity 0.8s ease, visibility 0.8s ease;
+      }
+
+      .loading-screen.hidden {
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      .loader-ring {
+        width: 80px;
+        height: 80px;
+        border: 3px solid rgba(255, 255, 255, 0.1);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Hamburger menu enhanced */
+      .hamburger {
+        width: 35px;
+        height: 30px;
+        position: relative;
+        cursor: pointer;
+        z-index: 1001;
+      }
+
+      .hamburger span {
+        position: absolute;
+        height: 3px;
+        width: 100%;
+        background: #fff;
+        border-radius: 3px;
+        transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      }
+
+      .hamburger span:nth-child(1) {
+        top: 0;
+      }
+      .hamburger span:nth-child(2) {
+        top: 50%;
+        transform: translateY(-50%);
+      }
+      .hamburger span:nth-child(3) {
+        bottom: 0;
+      }
+
+      .hamburger.active span:nth-child(1) {
+        transform: rotate(45deg);
+        top: 50%;
+      }
+
+      .hamburger.active span:nth-child(2) {
+        opacity: 0;
+        transform: translateX(-100%);
+      }
+
+      .hamburger.active span:nth-child(3) {
+        transform: rotate(-45deg);
+        bottom: 50%;
+      }
+
+      /* Mobile menu */
+      .mobile-menu {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 100%;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.98);
+        backdrop-filter: blur(20px);
+        z-index: 1000;
+        transition: right 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .mobile-menu.active {
+        right: 0;
+      }
+
+      /* Reveal animations */
+      .reveal {
         opacity: 0;
         transform: translateY(50px);
-        transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1),
-          transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
       }
 
-      .fade-in-visible {
+      .reveal.active {
         opacity: 1;
         transform: translateY(0);
       }
 
-      .slide-in-left {
-        opacity: 0;
-        transform: translateX(-100px);
-        transition: opacity 0.8s ease, transform 0.8s ease;
+      /* ENHANCED SKILLS SECTION */
+      .skills-container {
+        perspective: 2000px;
+        position: relative;
       }
 
-      .slide-in-right {
-        opacity: 0;
-        transform: translateX(100px);
-        transition: opacity 0.8s ease, transform 0.8s ease;
-      }
-
-      .slide-in-left.visible,
-      .slide-in-right.visible {
-        opacity: 1;
-        transform: translateX(0);
-      }
-
-      /* 3D Card effect */
-      .card-3d {
+      .skill-orb {
+        position: relative;
+        width: 180px;
+        height: 180px;
+        margin: 20px;
+        transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
         transform-style: preserve-3d;
-        transition: transform 0.5s ease;
+        cursor: pointer;
       }
 
-      .card-3d:hover {
-        transform: perspective(1000px) rotateY(10deg) rotateX(5deg) scale(1.05);
+      .skill-orb-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.1),
+          rgba(255, 255, 255, 0.05)
+        );
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.5s ease;
+        transform-style: preserve-3d;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3),
+          inset 0 0 20px rgba(255, 255, 255, 0.05);
       }
 
-      /* Enhanced project cards with 3D flip */
-      .project-card {
-        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      .skill-orb:hover .skill-orb-inner {
+        transform: translateZ(30px) scale(1.1);
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.15),
+          rgba(255, 255, 255, 0.08)
+        );
+        border-color: rgba(255, 255, 255, 0.4);
+        box-shadow: 0 20px 60px rgba(255, 255, 255, 0.2),
+          inset 0 0 30px rgba(255, 255, 255, 0.1);
+      }
+
+      .skill-icon {
+        font-size: 4rem;
+        margin-bottom: 10px;
+        filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+        transition: all 0.3s ease;
+        animation: orbFloat 3s ease-in-out infinite;
+      }
+
+      .skill-orb:hover .skill-icon {
+        transform: scale(1.2) rotateY(360deg);
+        filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.8));
+      }
+
+      @keyframes orbFloat {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      .skill-name {
+        font-size: 1.1rem;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 8px;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+      }
+
+      .skill-level {
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.7);
+        font-weight: 500;
+      }
+
+      /* Orbital rings effect */
+      .skill-orb::before {
+        content: "";
+        position: absolute;
+        inset: -20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        animation: orbitRotate 20s linear infinite;
+      }
+
+      .skill-orb::after {
+        content: "";
+        position: absolute;
+        inset: -30px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 50%;
+        animation: orbitRotate 30s linear infinite reverse;
+      }
+
+      @keyframes orbitRotate {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Particle burst on hover */
+      .skill-particle {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: white;
+        border-radius: 50%;
+        pointer-events: none;
+        animation: burstOut 1s ease-out forwards;
+      }
+
+      @keyframes burstOut {
+        to {
+          transform: translate(var(--tx), var(--ty)) scale(0);
+          opacity: 0;
+        }
+      }
+
+      /* 3D rotating skill sphere container */
+      .skills-sphere {
+        position: relative;
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+      }
+
+      /* Experience years badge */
+      .experience-badge {
+        position: absolute;
+        top: -20px;
+        right: -20px;
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #fff, #888);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 900;
+        font-size: 1.2rem;
+        color: #000;
+        box-shadow: 0 5px 20px rgba(255, 255, 255, 0.3);
+        animation: badgePulse 2s ease-in-out infinite;
+        z-index: 10;
+      }
+
+      @keyframes badgePulse {
+        0%,
+        100% {
+          transform: scale(1);
+          box-shadow: 0 5px 20px rgba(255, 255, 255, 0.3);
+        }
+        50% {
+          transform: scale(1.1);
+          box-shadow: 0 10px 30px rgba(255, 255, 255, 0.5);
+        }
+      }
+
+      /* Skill connection lines */
+      .skill-connections {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: -1;
+      }
+
+      .connection-line {
+        position: absolute;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transform-origin: left center;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+      }
+
+      .skill-orb:hover ~ .connection-line,
+      .skill-orb:hover .connection-line {
+        opacity: 1;
+      }
+
+      /* Liquid button effect */
+      .liquid-btn {
         position: relative;
         overflow: hidden;
-        transform-style: preserve-3d;
-        perspective: 1000px;
+        transition: all 0.4s ease;
+      }
+
+      .liquid-btn::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s ease, height 0.6s ease;
+      }
+
+      .liquid-btn:hover::before {
+        width: 300px;
+        height: 300px;
+      }
+
+      /* Project cards enhanced */
+      .project-card {
+        position: relative;
+        overflow: hidden;
+        transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
       }
 
       .project-card::before {
         content: "";
         position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
+        inset: 0;
         background: linear-gradient(
-          45deg,
+          135deg,
           transparent,
           rgba(255, 255, 255, 0.1),
           transparent
         );
-        transform: rotate(45deg);
-        transition: all 0.6s ease;
-      }
-
-      .project-card:hover::before {
-        left: 100%;
-      }
-
-      .project-card:hover {
-        transform: translateY(-15px) scale(1.03);
-        box-shadow: 0 30px 60px rgba(255, 255, 255, 0.2);
-      }
-
-      .project-image {
-        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        filter: grayscale(100%) brightness(0.7) contrast(1.2);
-      }
-
-      .project-card:hover .project-image {
-        filter: grayscale(0%) brightness(1) contrast(1);
-        transform: scale(1.15) rotate(2deg);
-      }
-
-      /* Holographic effect */
-      .holographic {
-        position: relative;
-        background: linear-gradient(135deg, #000 0%, #1a1a1a 100%);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-      }
-
-      .holographic::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(
-          135deg,
-          transparent 0%,
-          rgba(255, 255, 255, 0.1) 25%,
-          transparent 50%,
-          rgba(255, 255, 255, 0.1) 75%,
-          transparent 100%
-        );
-        background-size: 200% 200%;
-        animation: holographic-move 8s ease infinite;
-        pointer-events: none;
-      }
-
-      @keyframes holographic-move {
-        0% {
-          background-position: 0% 50%;
-        }
-        50% {
-          background-position: 100% 50%;
-        }
-        100% {
-          background-position: 0% 50%;
-        }
-      }
-
-      /* Skills with 3D rotation */
-      .skill-card {
-        transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        position: relative;
-        overflow: hidden;
-        transform-style: preserve-3d;
-      }
-
-      .skill-card::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: radial-gradient(
-          circle at center,
-          rgba(255, 255, 255, 0.2) 0%,
-          transparent 70%
-        );
-        transform: scale(0);
+        transform: translateX(-100%);
         transition: transform 0.6s ease;
       }
 
-      .skill-card:hover {
-        transform: translateY(-10px) rotateX(10deg) scale(1.05);
-        box-shadow: 0 20px 40px rgba(255, 255, 255, 0.15);
+      .project-card:hover::before {
+        transform: translateX(100%);
       }
 
-      .skill-card:hover::after {
-        transform: scale(1);
+      .project-card:hover {
+        transform: translateY(-10px);
       }
 
-      /* Animated social icons with glow */
-      .social-icon {
-        transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        position: relative;
+      .project-image {
+        transition: all 0.6s ease;
+        filter: grayscale(100%) brightness(0.6);
       }
 
-      .social-icon::before {
-        content: "";
-        position: absolute;
-        inset: -5px;
-        background: linear-gradient(45deg, #ffffff, #888888);
-        border-radius: 50%;
-        opacity: 0;
-        filter: blur(10px);
-        transition: opacity 0.4s ease;
-        z-index: -1;
+      .project-card:hover .project-image {
+        filter: grayscale(0%) brightness(1);
+        transform: scale(1.1);
       }
 
-      .social-icon:hover::before {
-        opacity: 1;
-        animation: pulse 1.5s infinite;
-      }
-
-      @keyframes pulse {
-        0%,
-        100% {
-          transform: scale(1);
-        }
-        50% {
-          transform: scale(1.2);
-        }
-      }
-
-      .social-icon:hover {
-        transform: scale(1.2) rotate(360deg);
-        background-color: white;
-        color: black;
-      }
-
-      /* Enhanced gradient text with animation */
-      .gradient-text {
-        background: linear-gradient(
-          135deg,
-          #ffffff 0%,
-          #666666 50%,
-          #ffffff 100%
-        );
-        background-size: 200% 200%;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        animation: gradient-flow 4s ease infinite;
-        text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
-      }
-
-      @keyframes gradient-flow {
-        0% {
-          background-position: 0% 50%;
-        }
-        50% {
-          background-position: 100% 50%;
-        }
-        100% {
-          background-position: 0% 50%;
-        }
-      }
-
-      /* Progress bar with glow */
-      .progress-bar {
-        transition: width 2s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        overflow: hidden;
-        box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-      }
-
-      .progress-bar::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          rgba(255, 255, 255, 0.6),
-          transparent
-        );
-        animation: shimmer 2.5s infinite;
-      }
-
-      @keyframes shimmer {
-        0% {
-          transform: translateX(-100%);
-        }
-        100% {
-          transform: translateX(200%);
-        }
-      }
-
-      /* Enhanced modal */
+      /* Modal enhanced */
       .modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.95);
+        backdrop-filter: blur(10px);
         display: none;
-        backdrop-filter: blur(20px);
-        background: rgba(0, 0, 0, 0.9);
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        padding: 1rem;
       }
 
       .modal.active {
         display: flex;
-        animation: fadeIn 0.4s ease;
+        animation: fadeIn 0.3s ease;
       }
 
       @keyframes fadeIn {
@@ -428,104 +840,24 @@
       }
 
       .modal-content {
-        animation: modalSlideUp 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        box-shadow: 0 0 50px rgba(255, 255, 255, 0.3);
+        background: rgba(20, 20, 20, 0.95);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 1rem;
+        max-width: 900px;
+        width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+        animation: modalSlide 0.4s cubic-bezier(0.23, 1, 0.32, 1);
       }
 
-      @keyframes modalSlideUp {
+      @keyframes modalSlide {
         from {
-          transform: translateY(100px) scale(0.9);
           opacity: 0;
+          transform: translateY(50px) scale(0.9);
         }
         to {
+          opacity: 1;
           transform: translateY(0) scale(1);
-          opacity: 1;
-        }
-      }
-
-      /* Hamburger menu enhanced */
-      .hamburger {
-        cursor: pointer;
-        width: 35px;
-        height: 28px;
-        position: relative;
-        z-index: 1001;
-      }
-
-      .hamburger span {
-        display: block;
-        position: absolute;
-        height: 4px;
-        width: 100%;
-        background: white;
-        border-radius: 4px;
-        opacity: 1;
-        left: 0;
-        transform: rotate(0deg);
-        transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-      }
-
-      .hamburger span:nth-child(1) {
-        top: 0px;
-      }
-      .hamburger span:nth-child(2) {
-        top: 12px;
-      }
-      .hamburger span:nth-child(3) {
-        top: 24px;
-      }
-
-      .hamburger.active span:nth-child(1) {
-        top: 12px;
-        transform: rotate(135deg);
-      }
-
-      .hamburger.active span:nth-child(2) {
-        opacity: 0;
-        left: -60px;
-      }
-
-      .hamburger.active span:nth-child(3) {
-        top: 12px;
-        transform: rotate(-135deg);
-      }
-
-      /* Scroll indicator enhanced */
-      .scroll-indicator {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 4px;
-        background: linear-gradient(
-          90deg,
-          #ffffff 0%,
-          #888888 50%,
-          #ffffff 100%
-        );
-        background-size: 200% 100%;
-        transform-origin: left;
-        z-index: 9999;
-        box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-        animation: gradient-flow 3s linear infinite;
-      }
-
-      /* Typing cursor enhanced */
-      .typing-cursor::after {
-        content: "|";
-        animation: blink 1s step-end infinite;
-        margin-left: 4px;
-        text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-      }
-
-      @keyframes blink {
-        0%,
-        100% {
-          opacity: 1;
-        }
-        50% {
-          opacity: 0;
         }
       }
 
@@ -547,112 +879,42 @@
         background: #fff;
       }
 
-      /* Loading animation enhanced */
-      .loading-wrapper {
-        position: fixed;
-        inset: 0;
-        background: black;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 10000;
-        transition: opacity 0.8s ease;
-      }
-
-      .loading-wrapper.hidden {
-        opacity: 0;
-        pointer-events: none;
-      }
-
-      .loader {
-        width: 60px;
-        height: 60px;
-        border: 4px solid rgba(255, 255, 255, 0.1);
-        border-top-color: white;
-        border-radius: 50%;
-        animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
-        box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-      }
-
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
-        }
-      }
-
-      /* Parallax sections */
-      .parallax-section {
-        position: relative;
-        background-attachment: fixed;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
-      }
-
-      /* Text reveal animation */
-      .reveal-text {
-        clip-path: polygon(0 0, 0 0, 0 100%, 0% 100%);
-        transition: clip-path 1s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-
-      .reveal-text.visible {
-        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-      }
-
-      /* Button hover effect */
-      .btn-hero {
-        position: relative;
-        overflow: hidden;
-        z-index: 1;
-      }
-
-      .btn-hero::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(
-          45deg,
-          transparent,
-          rgba(255, 255, 255, 0.3),
-          transparent
-        );
-        transform: translateX(-100%);
-        transition: transform 0.6s ease;
-      }
-
-      .btn-hero:hover::before {
-        transform: translateX(100%);
-      }
-
-      /* Responsive improvements */
+      /* Responsive */
       @media (max-width: 768px) {
-        .hero-title {
+        body {
+          cursor: auto;
+        }
+
+        .cursor-dot,
+        .cursor-outline,
+        .cursor-glow,
+        .cursor-trail {
+          display: none;
+        }
+
+        h1 {
+          font-size: 2.5rem !important;
+        }
+        h2 {
+          font-size: 2rem !important;
+        }
+
+        .skill-orb {
+          width: 140px;
+          height: 140px;
+          margin: 10px;
+        }
+
+        .skill-icon {
           font-size: 3rem;
         }
-        .hero-subtitle {
-          font-size: 2rem;
-        }
-        .section-title {
-          font-size: 2.5rem;
-        }
       }
 
-      @media (max-width: 480px) {
-        .hero-title {
-          font-size: 2.5rem;
-        }
-        .hero-subtitle {
-          font-size: 1.5rem;
-        }
-        .section-title {
-          font-size: 2rem;
-        }
-      }
-
-      /* Timeline style */
+      /* Timeline */
       .timeline-item {
         position: relative;
         padding-left: 40px;
+        margin-bottom: 30px;
       }
 
       .timeline-item::before {
@@ -660,172 +922,182 @@
         position: absolute;
         left: 0;
         top: 0;
-        bottom: -20px;
+        bottom: -30px;
         width: 2px;
-        background: linear-gradient(180deg, white, transparent);
+        background: linear-gradient(180deg, #fff, transparent);
       }
 
       .timeline-item::after {
         content: "";
         position: absolute;
-        left: -4px;
-        top: 6px;
-        width: 10px;
-        height: 10px;
+        left: -5px;
+        top: 5px;
+        width: 12px;
+        height: 12px;
         border-radius: 50%;
-        background: white;
-        box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        background: #fff;
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+        animation: pulse 2s ease-in-out infinite;
       }
 
-      .timeline-item:hover::after {
-        animation: pulse 1s infinite;
-      }
-
-      /* Floating animation */
-      .float {
-        animation: floating 3s ease-in-out infinite;
-      }
-
-      @keyframes floating {
+      @keyframes pulse {
         0%,
         100% {
-          transform: translateY(0px);
+          box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+          transform: scale(1);
         }
         50% {
-          transform: translateY(-20px);
+          box-shadow: 0 0 30px rgba(255, 255, 255, 1);
+          transform: scale(1.2);
         }
       }
 
-      /* Neon text effect */
-      .neon-text {
-        text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #fff, 0 0 40px #fff;
+      /* Tilt effect */
+      .tilt-card {
+        transform-style: preserve-3d;
+        transition: transform 0.5s ease;
+      }
+
+      .tilt-card:hover {
+        transform: perspective(1000px) rotateX(var(--rotateX))
+          rotateY(var(--rotateY)) scale(1.05);
       }
     </style>
   </head>
-  <body class="bg-black text-white">
+  <body>
+    <!-- Enhanced Custom Cursor System -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+    <div class="cursor-glow"></div>
+
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loading">
+      <div class="loader-ring"></div>
+      <p class="mt-6 text-xl font-light">Loading Portfolio...</p>
+    </div>
+
+    <!-- Scroll Progress -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
     <!-- 3D Canvas Background -->
     <div id="canvas-container"></div>
 
-    <!-- Loading Screen -->
-    <div id="loading" class="loading-wrapper">
-      <div class="loader"></div>
-    </div>
-
-    <!-- Scroll Indicator -->
-    <div id="scroll-indicator" class="scroll-indicator"></div>
+    <!-- Particle Container -->
+    <div class="particle-container" id="particleContainer"></div>
 
     <div class="content-wrapper">
-      <!-- Mobile Navigation -->
-      <nav class="fixed top-0 right-0 p-6 z-50 md:hidden">
-        <div class="hamburger" onclick="toggleMobileMenu()">
+      <!-- Navigation -->
+      <nav
+        class="fixed top-0 left-0 right-0 z-50 p-6 flex justify-between items-center"
+      >
+        <div class="text-2xl font-bold gradient-text-animated">TACO.DEV</div>
+
+        <!-- Desktop Nav -->
+        <div class="hidden md:flex gap-8">
+          <a
+            href="#about"
+            class="text-sm font-medium hover:text-gray-400 transition"
+            >ABOUT</a
+          >
+          <a
+            href="#work"
+            class="text-sm font-medium hover:text-gray-400 transition"
+            >WORK</a
+          >
+          <a
+            href="#games"
+            class="text-sm font-medium hover:text-gray-400 transition"
+            >GAMES</a
+          >
+          <a
+            href="#skills"
+            class="text-sm font-medium hover:text-gray-400 transition"
+            >SKILLS</a
+          >
+          <a
+            href="#contact"
+            class="text-sm font-medium hover:text-gray-400 transition"
+            >CONTACT</a
+          >
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <div class="hamburger md:hidden" onclick="toggleMenu()">
           <span></span>
           <span></span>
           <span></span>
         </div>
       </nav>
 
-      <div
-        id="mobile-menu"
-        class="mobile-nav fixed inset-0 z-40 flex flex-col items-center justify-center"
-      >
+      <!-- Mobile Menu -->
+      <div class="mobile-menu" id="mobileMenu">
         <a
           href="#about"
-          onclick="toggleMobileMenu()"
-          class="text-3xl font-semibold mb-8 hover:text-gray-400 transition neon-text"
-          >About</a
+          onclick="toggleMenu()"
+          class="text-4xl font-bold mb-8 neon-glow"
+          >ABOUT</a
         >
         <a
           href="#work"
-          onclick="toggleMobileMenu()"
-          class="text-3xl font-semibold mb-8 hover:text-gray-400 transition neon-text"
-          >Work</a
+          onclick="toggleMenu()"
+          class="text-4xl font-bold mb-8 neon-glow"
+          >WORK</a
         >
         <a
-          href="#past-works"
-          onclick="toggleMobileMenu()"
-          class="text-3xl font-semibold mb-8 hover:text-gray-400 transition neon-text"
-          >Games</a
+          href="#games"
+          onclick="toggleMenu()"
+          class="text-4xl font-bold mb-8 neon-glow"
+          >GAMES</a
         >
         <a
           href="#skills"
-          onclick="toggleMobileMenu()"
-          class="text-3xl font-semibold mb-8 hover:text-gray-400 transition neon-text"
-          >Skills</a
+          onclick="toggleMenu()"
+          class="text-4xl font-bold mb-8 neon-glow"
+          >SKILLS</a
         >
         <a
           href="#contact"
-          onclick="toggleMobileMenu()"
-          class="text-3xl font-semibold hover:text-gray-400 transition neon-text"
-          >Contact</a
+          onclick="toggleMenu()"
+          class="text-4xl font-bold neon-glow"
+          >CONTACT</a
         >
       </div>
 
-      <!-- Desktop Navigation -->
-      <nav class="hidden md:flex fixed top-0 right-0 p-8 z-50 gap-6">
-        <a
-          href="#about"
-          class="text-lg font-medium hover:text-gray-400 transition"
-          >About</a
-        >
-        <a
-          href="#work"
-          class="text-lg font-medium hover:text-gray-400 transition"
-          >Work</a
-        >
-        <a
-          href="#past-works"
-          class="text-lg font-medium hover:text-gray-400 transition"
-          >Games</a
-        >
-        <a
-          href="#skills"
-          class="text-lg font-medium hover:text-gray-400 transition"
-          >Skills</a
-        >
-        <a
-          href="#contact"
-          class="text-lg font-medium hover:text-gray-400 transition"
-          >Contact</a
-        >
-      </nav>
-
       <!-- Hero Section -->
       <section
-        class="min-h-screen flex flex-col items-center justify-center px-4 py-20 relative"
+        class="min-h-screen flex items-center justify-center px-4 relative"
       >
-        <div id="particles"></div>
-        <div class="text-center max-w-5xl">
+        <div class="text-center max-w-6xl">
           <h1
-            class="hero-title text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-6 md:mb-8 gradient-text glitch float"
-            data-text="Taco Dev Portfolio"
+            class="text-7xl md:text-9xl font-black mb-8 glitch-text float-element"
+            data-text="TACO DEV"
           >
-            Taco Dev Portfolio
+            TACO DEV
           </h1>
           <div
-            id="typing-text"
-            class="hero-subtitle text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-semibold mb-8 md:mb-12 h-16 md:h-20 typing-cursor"
+            class="text-3xl md:text-5xl font-bold mb-12 gradient-text-animated"
+            id="typingText"
           ></div>
           <button
-            onclick="scrollToSection('work')"
-            class="btn-hero px-6 py-3 md:px-8 md:py-4 bg-white text-black font-semibold rounded-full hover:bg-gray-200 transition-all duration-300 transform hover:scale-110 active:scale-95 text-sm md:text-base shadow-lg"
+            onclick="document.getElementById('work').scrollIntoView({behavior:'smooth'})"
+            class="magnetic-btn liquid-btn px-10 py-5 bg-white text-black font-bold rounded-full text-lg hover:shadow-2xl transition-all"
           >
-            See my work
+            <span class="relative z-10">EXPLORE MY WORK</span>
           </button>
         </div>
       </section>
 
-      <!-- About Me Section -->
-      <section id="about" class="min-h-screen py-12 md:py-20 px-4 fade-in">
-        <div class="max-w-6xl mx-auto">
-          <h2
-            class="section-title text-3xl md:text-4xl lg:text-5xl font-bold mb-8 md:mb-16 text-center reveal-text"
-          >
-            About Me
+      <!-- About Section -->
+      <section id="about" class="min-h-screen py-20 px-4">
+        <div class="max-w-7xl mx-auto">
+          <h2 class="text-6xl md:text-8xl font-black mb-20 text-center reveal">
+            ABOUT <span class="gradient-text-animated">ME</span>
           </h2>
-          <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
-            <div class="order-2 md:order-1 slide-in-left">
+
+          <div class="grid md:grid-cols-2 gap-16 items-center">
+            <div class="reveal">
               <div
-                class="w-48 h-48 md:w-64 md:h-64 mx-auto bg-gray-800 rounded-full overflow-hidden border-4 border-gray-700 shadow-2xl float card-3d"
+                class="w-80 h-80 mx-auto morphing-shape overflow-hidden float-element"
               >
                 <img
                   src="https://i.ibb.co/gb3cWFzV/D49-C486-A-BD1-D-4664-B6-A2-5-D04080-CFABA.png"
@@ -834,56 +1106,40 @@
                 />
               </div>
             </div>
-            <div class="order-1 md:order-2 slide-in-right">
-              <p
-                class="text-base md:text-lg lg:text-xl text-gray-300 mb-6 leading-relaxed"
-              >
-                I'm a NERD, programmer - discord bots and my stuff, Roblox
-                developer specializing in networking, and working with the
-                Roblox API. I also focus on game systems, automation, and
-                integrations with external APIs to create connected experiences.
-                I'm passionate about creating moderation bots as well as complex
-                bots integrated with various APIs or connected to the game
-                through REST APIs and other systems. Learning machine
-                engineering - C++, C
+
+            <div class="reveal">
+              <p class="text-xl text-gray-300 mb-8 leading-relaxed">
+                I'm a <span class="text-white font-bold">NERD</span>, programmer
+                specializing in Discord bots, Roblox development, networking,
+                and API integration. I create complex moderation systems, game
+                mechanics, and automation tools. Currently learning machine
+                engineering with C++ and C.
               </p>
-              <div class="space-y-3 md:space-y-4">
-                <div
-                  class="timeline-item hover:pl-6 transition-all duration-300"
-                >
-                  <h3 class="font-semibold text-base md:text-lg">2021</h3>
-                  <p class="text-gray-400 text-sm md:text-base">
-                    I started working in Roblox Studio and began learning
-                    Python.
+
+              <div class="space-y-6">
+                <div class="timeline-item">
+                  <h3 class="text-xl font-bold mb-2">2021</h3>
+                  <p class="text-gray-400">
+                    Started with Roblox Studio and Python
                   </p>
                 </div>
-                <div
-                  class="timeline-item hover:pl-6 transition-all duration-300"
-                >
-                  <h3 class="font-semibold text-base md:text-lg">2022</h3>
-                  <p class="text-gray-400 text-sm md:text-base">
-                    Created my first advanced Discord bot for an ER:LC roleplay
-                    server and started learning LuaU
+                <div class="timeline-item">
+                  <h3 class="text-xl font-bold mb-2">2022</h3>
+                  <p class="text-gray-400">
+                    Created first advanced Discord bot, learned LuaU
                   </p>
                 </div>
-                <div
-                  class="timeline-item hover:pl-6 transition-all duration-300"
-                >
-                  <h3 class="font-semibold text-base md:text-lg">2023</h3>
-                  <p class="text-gray-400 text-sm md:text-base">
-                    First projects in Luau and became part of the roblox
-                    developer community.
+                <div class="timeline-item">
+                  <h3 class="text-xl font-bold mb-2">2023</h3>
+                  <p class="text-gray-400">
+                    First Luau projects, joined Roblox dev community
                   </p>
                 </div>
-                <div
-                  class="timeline-item hover:pl-6 transition-all duration-300"
-                >
-                  <h3 class="font-semibold text-base md:text-lg">2024–2025</h3>
-                  <p class="text-gray-300 text-sm md:text-base">
-                    Gained a lot of experience (contributing to czech RPs,
-                    Contributed as a developer to a Roblox game that reached
-                    over 2 million visits.) started creating open-source
-                    projects (Roblox systems, desktop apps, Python libraries).
+                <div class="timeline-item">
+                  <h3 class="text-xl font-bold mb-2">2024-2025</h3>
+                  <p class="text-gray-300 font-semibold">
+                    Contributed to games with 2M+ visits, created open-source
+                    projects
                   </p>
                 </div>
               </div>
@@ -892,191 +1148,149 @@
         </div>
       </section>
 
-      <!-- My Work Section -->
-      <section
-        id="work"
-        class="min-h-screen py-12 md:py-20 px-4 holographic fade-in"
-      >
+      <!-- Work Section -->
+      <section id="work" class="min-h-screen py-20 px-4">
         <div class="max-w-7xl mx-auto">
-          <h2
-            class="section-title text-3xl md:text-4xl lg:text-5xl font-bold mb-8 md:mb-16 text-center reveal-text"
-          >
-            Some of my assets mainly you can find their source on my GitHub.
+          <h2 class="text-6xl md:text-8xl font-black mb-20 text-center reveal">
+            MY <span class="gradient-text-animated">WORK</span>
           </h2>
+
+          <p class="text-center text-xl text-gray-400 mb-12 reveal">
+            Open-source projects and systems - Find more on my GitHub
+          </p>
+
           <div
-            id="projects-grid"
-            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
+            id="projectsGrid"
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
-            <!-- Projects will be inserted here by JavaScript -->
+            <!-- Projects will be inserted here -->
           </div>
         </div>
       </section>
 
-      <!-- Past Works Section -->
-      <section id="past-works" class="min-h-screen py-12 md:py-20 px-4 fade-in">
+      <!-- Games Section -->
+      <section id="games" class="min-h-screen py-20 px-4">
         <div class="max-w-7xl mx-auto">
-          <h2
-            class="section-title text-3xl md:text-4xl lg:text-5xl font-bold mb-8 md:mb-16 text-center reveal-text"
-          >
-            Past Works - Games
+          <h2 class="text-6xl md:text-8xl font-black mb-20 text-center reveal">
+            PAST <span class="gradient-text-animated">GAMES</span>
           </h2>
-          <div
-            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
-          >
-            <!-- Game Card 1 -->
-            <div
-              class="bg-gray-800 rounded-xl overflow-hidden hover:shadow-2xl transition-all card-3d holographic"
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Game 1 -->
+            <a
+              href="https://www.roblox.com/games/16841862338/Senec-County-Slovakia"
+              target="_blank"
+              class="holo-card rounded-2xl overflow-hidden reveal tilt-card"
             >
-              <a
-                href="https://www.roblox.com/games/16841862338/Senec-County-Slovakia"
-                target="_blank"
-                class="block"
-              >
-                <img
-                  src="https://i.ibb.co/1tRzwG7K/21-DBDF36-71-FF-4-C41-BC65-88669-C13-AF1-F.png"
-                  alt="Senec"
-                  class="w-full h-40 md:h-48 object-cover transition-transform hover:scale-105"
-                  loading="lazy"
-                />
-                <div class="p-4 md:p-6 text-center">
-                  <h3 class="text-lg md:text-xl font-semibold mb-2">
-                    Senec County RP
-                  </h3>
-                  <p class="text-gray-400 text-xs md:text-sm mb-2">
-                    Visits: 1.8M+
-                  </p>
-                  <p class="text-gray-400 text-xs md:text-sm">
-                    I did here high quality RP assets, highly modular key fob or
-                    other assets for an a-chassis system.
-                  </p>
-                </div>
-              </a>
+              <img
+                src="https://i.ibb.co/1tRzwG7K/21-DBDF36-71-FF-4-C41-BC65-88669-C13-AF1-F.png"
+                alt="Senec"
+                class="w-full h-48 object-cover"
+              />
+              <div class="p-6">
+                <h3 class="text-2xl font-bold mb-2">Senec County RP</h3>
+                <p class="text-gray-400 mb-2">1.8M+ Visits</p>
+                <p class="text-sm text-gray-500">
+                  High quality RP assets, modular key fob, A-Chassis systems
+                </p>
+              </div>
+            </a>
+
+            <!-- Game 2 -->
+            <a
+              href="https://www.roblox.com/games/16897965419/Czech-Realm-RP"
+              target="_blank"
+              class="holo-card rounded-2xl overflow-hidden reveal tilt-card"
+            >
+              <img
+                src="https://i.ibb.co/5gn4kNZG/F97-B2-BC2-6008-4-D74-916-C-09944197-DAF9.png"
+                alt="Czech Realm"
+                class="w-full h-48 object-cover"
+              />
+              <div class="p-6">
+                <h3 class="text-2xl font-bold mb-2">Czech Realm</h3>
+                <p class="text-gray-400 mb-2">500K+ Visits</p>
+                <p class="text-sm text-gray-500">
+                  API integration, Node.js, Rojo, external management systems
+                </p>
+              </div>
+            </a>
+
+            <!-- Game 3 -->
+            <div class="holo-card rounded-2xl overflow-hidden reveal tilt-card">
+              <img
+                src="https://i.ibb.co/fdJXhmz1/BDD5-DFC0-DD56-4-F29-958-B-FB73245-B9347.png"
+                alt="Czech Zone"
+                class="w-full h-48 object-cover"
+              />
+              <div class="p-6">
+                <h3 class="text-2xl font-bold mb-2">Czech Zone</h3>
+                <p class="text-gray-400 mb-2">Whitelist Only</p>
+                <p class="text-sm text-gray-500">
+                  High quality RP assets, API and Node.js integration
+                </p>
+              </div>
             </div>
 
-            <!-- Game Card 2 -->
-            <div
-              class="bg-gray-800 rounded-xl overflow-hidden hover:shadow-2xl transition-all card-3d holographic"
-            >
-              <a
-                href="https://www.roblox.com/games/16897965419/Czech-Realm-RP"
-                target="_blank"
-                class="block"
-              >
-                <img
-                  src="https://i.ibb.co/5gn4kNZG/F97-B2-BC2-6008-4-D74-916-C-09944197-DAF9.png"
-                  alt="Czech Realm"
-                  class="w-full h-40 md:h-48 object-cover transition-transform hover:scale-105"
-                  loading="lazy"
-                />
-                <div class="p-4 md:p-6 text-center">
-                  <h3 class="text-lg md:text-xl font-semibold mb-2">
-                    Czech Realm
-                  </h3>
-                  <p class="text-gray-400 text-xs md:text-sm mb-2">
-                    Visits: 500,000+
-                  </p>
-                  <p class="text-gray-400 text-xs md:text-sm">
-                    I did here high quality RP assets. Working with API and
-                    node.js, working with rojo or our external managing systems.
-                  </p>
-                </div>
-              </a>
-            </div>
-
-            <!-- Game Card 3 -->
-            <div
-              class="bg-gray-800 rounded-xl overflow-hidden hover:shadow-2xl transition-all card-3d holographic"
-            >
-              <a href="#" target="_blank" class="block">
-                <img
-                  src="https://i.ibb.co/fdJXhmz1/BDD5-DFC0-DD56-4-F29-958-B-FB73245-B9347.png"
-                  alt="Czech Zone"
-                  class="w-full h-40 md:h-48 object-cover transition-transform hover:scale-105"
-                  loading="lazy"
-                />
-                <div class="p-4 md:p-6 text-center">
-                  <h3 class="text-lg md:text-xl font-semibold mb-2">
-                    Czech Zone
-                  </h3>
-                  <p class="text-gray-400 text-xs md:text-sm mb-2">
-                    There wasn't much here, it was on the white list...
-                  </p>
-                  <p class="text-gray-400 text-xs md:text-sm">
-                    I did here high quality RP assets. Working with API and
-                    node.js
-                  </p>
-                </div>
-              </a>
-            </div>
-
-            <!-- Game Card 4 -->
-            <div
-              class="bg-gray-800 rounded-xl overflow-hidden hover:shadow-2xl transition-all card-3d holographic"
-            >
-              <a href="#" target="_blank" class="block">
-                <img
-                  src="https://i.ibb.co/cS31RFZX/F344-C885-5-BDB-40-D3-BA6-B-ECE17-EFE2-AE3.png"
-                  alt="BrainRot Battles"
-                  class="w-full h-40 md:h-48 object-cover transition-transform hover:scale-105"
-                  loading="lazy"
-                />
-                <div class="p-4 md:p-6 text-center">
-                  <h3 class="text-lg md:text-xl font-semibold mb-2">
-                    BrainRot Battles
-                  </h3>
-                  <p class="text-gray-400 text-xs md:text-sm">
-                    Visits: 500,000+
-                  </p>
-                </div>
-              </a>
+            <!-- Game 4 -->
+            <div class="holo-card rounded-2xl overflow-hidden reveal tilt-card">
+              <img
+                src="https://i.ibb.co/cS31RFZX/F344-C885-5-BDB-40-D3-BA6-B-ECE17-EFE2-AE3.png"
+                alt="BrainRot Battles"
+                class="w-full h-48 object-cover"
+              />
+              <div class="p-6">
+                <h3 class="text-2xl font-bold mb-2">BrainRot Battles</h3>
+                <p class="text-gray-400 mb-2">500K+ Visits</p>
+                <p class="text-sm text-gray-500">
+                  Game systems and AI scripting
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Skills Section -->
-      <section
-        id="skills"
-        class="min-h-screen py-12 md:py-20 px-4 fade-in holographic"
-      >
-        <div class="max-w-6xl mx-auto">
-          <h2
-            class="section-title text-3xl md:text-4xl lg:text-5xl font-bold mb-8 md:mb-16 text-center reveal-text"
-          >
-            Skills & Stack
+      <!-- ENHANCED SKILLS SECTION -->
+      <section id="skills" class="min-h-screen py-20 px-4">
+        <div class="max-w-7xl mx-auto">
+          <h2 class="text-6xl md:text-8xl font-black mb-12 text-center reveal">
+            SKILLS & <span class="gradient-text-animated">STACK</span>
           </h2>
-          <div
-            id="skills-grid"
-            class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8 mb-16"
-          >
-            <!-- Skills will be inserted here by JavaScript -->
+
+          <p class="text-center text-xl text-gray-400 mb-20 reveal">
+            Hover over the orbs to see them come alive
+          </p>
+
+          <div class="skills-container reveal">
+            <div class="skills-sphere" id="skillsSphere">
+              <!-- Skills will be inserted here -->
+            </div>
           </div>
         </div>
       </section>
 
       <!-- Contact Section -->
-      <section id="contact" class="min-h-screen py-12 md:py-20 px-4 fade-in">
+      <section
+        id="contact"
+        class="min-h-screen py-20 px-4 flex items-center justify-center"
+      >
         <div class="max-w-4xl mx-auto text-center">
-          <h2
-            class="section-title text-3xl md:text-4xl lg:text-5xl font-bold mb-8 md:mb-16 reveal-text"
-          >
-            Get In Touch
+          <h2 class="text-6xl md:text-8xl font-black mb-12 reveal">
+            GET IN <span class="gradient-text-animated">TOUCH</span>
           </h2>
-          <p class="text-lg md:text-xl text-gray-300 mb-8 md:mb-12 px-4">
-            Do you think your project is interesting? DM me!
+
+          <p class="text-2xl text-gray-300 mb-16 reveal">
+            Got an interesting project? Let's talk!
           </p>
-          <div class="flex justify-center gap-6 md:gap-8 flex-wrap">
+
+          <div class="flex justify-center gap-8 reveal">
             <a
               href="https://github.com/D-M-dev"
               target="_blank"
-              rel="noopener noreferrer"
-              class="social-icon w-14 h-14 md:w-16 md:h-16 bg-gray-900 rounded-full flex items-center justify-center text-2xl relative z-10"
-              aria-label="GitHub"
+              class="magnetic-btn w-20 h-20 bg-white text-black rounded-full flex items-center justify-center hover:scale-110 transition-transform"
             >
-              <svg
-                class="w-7 h-7 md:w-8 md:h-8 fill-current"
-                viewBox="0 0 24 24"
-              >
+              <svg class="w-10 h-10 fill-current" viewBox="0 0 24 24">
                 <path
                   d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"
                 />
@@ -1085,14 +1299,9 @@
             <a
               href="https://www.roblox.com/users/2488479952/profile"
               target="_blank"
-              rel="noopener noreferrer"
-              class="social-icon w-14 h-14 md:w-16 md:h-16 bg-gray-900 rounded-full flex items-center justify-center text-2xl relative z-10"
-              aria-label="Roblox"
+              class="magnetic-btn w-20 h-20 bg-white text-black rounded-full flex items-center justify-center hover:scale-110 transition-transform"
             >
-              <svg
-                class="w-7 h-7 md:w-8 md:h-8 fill-current"
-                viewBox="0 0 24 24"
-              >
+              <svg class="w-10 h-10 fill-current" viewBox="0 0 24 24">
                 <path
                   d="M18.926 23.998L0 18.892 5.075.002 24 5.108 18.926 24zM15.348 10.09l-5.282-1.453-1.414 5.273 5.282 1.453 1.414-5.273z"
                 />
@@ -1102,58 +1311,270 @@
         </div>
       </section>
 
-      <!-- Project Modal -->
-      <div
-        id="project-modal"
-        class="modal fixed inset-0 bg-black bg-opacity-95 items-center justify-center p-4 z-50"
-        onclick="handleModalClick(event)"
-      >
-        <div
-          class="modal-content bg-gray-900 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto holographic"
-        >
-          <div class="relative">
-            <button
-              onclick="closeModal()"
-              class="absolute top-2 right-2 md:top-4 md:right-4 w-8 h-8 md:w-10 md:h-10 bg-white text-black rounded-full hover:bg-gray-200 transition-colors z-10 flex items-center justify-center text-xl md:text-2xl font-bold"
-              aria-label="Close modal"
-            >
-              ✕
-            </button>
-            <img
-              id="modal-image"
-              src=""
-              alt=""
-              class="w-full h-48 md:h-64 object-cover rounded-t-xl"
-            />
-          </div>
-          <div class="p-4 md:p-8">
-            <h3
-              id="modal-title"
-              class="text-2xl md:text-3xl font-bold mb-3 md:mb-4"
-            ></h3>
-            <p
-              id="modal-description"
-              class="text-gray-300 text-sm md:text-lg mb-4 md:mb-6"
-            ></p>
-            <div
-              id="modal-tech"
-              class="flex flex-wrap gap-2 md:gap-3 mb-4 md:mb-6"
-            ></div>
-            <div id="modal-video"></div>
-          </div>
-        </div>
-      </div>
-
       <!-- Footer -->
-      <footer
-        class="py-6 md:py-8 text-center text-gray-500 border-t border-gray-900"
-      >
-        <p class="text-sm md:text-base">Made by taco, source on my GitHub.</p>
+      <footer class="py-12 text-center text-gray-500 border-t border-gray-900">
+        <p class="text-lg">Made by TACO and some front end features by CLAUDE sonnet 4.5 | Source on GitHub</p>
+        <p class="text-sm mt-2">Taco Dev</p>
       </footer>
     </div>
 
+    <!-- Modal -->
+    <div
+      id="modal"
+      class="modal"
+      onclick="if(event.target === this) closeModal()"
+    >
+      <div class="modal-content">
+        <button
+          onclick="closeModal()"
+          class="absolute top-4 right-4 w-12 h-12 bg-white text-black rounded-full flex items-center justify-center text-2xl font-bold hover:scale-110 transition-transform z-10"
+        >
+          ✕
+        </button>
+        <img id="modalImage" src="" alt="" class="w-full h-64 object-cover" />
+        <div class="p-8">
+          <h3 id="modalTitle" class="text-4xl font-bold mb-4"></h3>
+          <p id="modalDescription" class="text-gray-300 text-lg mb-6"></p>
+          <div id="modalTech" class="flex flex-wrap gap-3 mb-6"></div>
+          <div id="modalVideo"></div>
+        </div>
+      </div>
+    </div>
+
     <script>
-      // 3D Background with Three.js
+      // Projects Data
+      const projects = [
+        {
+          id: 1,
+          title: "3rd Person Gun System",
+          image:
+            "https://i.ibb.co/5WjfXkvL/E64-FC619-8-B23-4-DC9-9-E19-72-EEEF971937-kopie.png",
+          description:
+            "Open source gun system with animations, raycast modules, heavily modular. Available on GitHub.",
+          tech: ["Lua", "Roblox Studio", "Systems"],
+          video: "",
+        },
+        {
+          id: 2,
+          title: "Basic AntiCheat",
+          image:
+            "https://i.ibb.co/8DzMpd8L/EFE78065-0-A9-B-43-C6-976-E-A0773081-E221.png",
+          description:
+            "Server-side security system to protect Roblox games from exploiters. Source on GitHub.",
+          tech: ["Luau", "Security", "Roblox"],
+          video: "https://files.catbox.moe/g2ot21.mkv",
+        },
+        {
+          id: 3,
+          title: "FLOYD Assistant",
+          image:
+            "https://i.ibb.co/zhjyrqms/8-E73548-F-C176-4836-9237-AA8-F446748-BF.png",
+          description:
+            "Developer/admin assistant - view local scripts, edit workspace, and more.",
+          tech: ["Luau", "Roblox", "Tools"],
+          video: "https://files.catbox.moe/abwsbr.mkv",
+        },
+        {
+          id: 4,
+          title: "Character Creation",
+          image:
+            "https://i.ibb.co/spX7xXP8/2931740-B-4-C7-C-4-E2-A-905-D-35-B0-C3-E7-C077.png",
+          description: "Character creation system similar to GTA V",
+          tech: ["Luau", "Roblox", "UI"],
+          video: null,
+        },
+        {
+          id: 5,
+          title: "BrainRot Game",
+          image:
+            "https://i.ibb.co/QwnJXZQ/CEC592-F2-8-D91-42-FE-BE1-B-75-A5-E8382300.png",
+          description: "Quality game systems with AI scripting",
+          tech: ["Luau", "AI", "Games"],
+          video: "https://files.catbox.moe/ounxuq.mkv",
+        },
+        {
+          id: 6,
+          title: "Skiddy Scripts Finder",
+          image:
+            "https://i.ibb.co/fVFVvsK7/CDF99423-808-D-492-F-8782-AA80-E4-D583-F3.png",
+          description:
+            "Security tool to find malicious scripts - require(assetID), loadstring(), Base64 encoded code",
+          tech: ["Luau", "Security", "Analysis"],
+          video: "https://files.catbox.moe/7wg1ao.mkv",
+        },
+        {
+          id: 7,
+          title: "Advanced AntiCheat",
+          image:
+            "https://i.ibb.co/cc38CHkf/B6-F89919-EB6-C-4954-962-D-9-A062401739-F.png",
+          description:
+            "Anti-hook, server validation, movement detection, noclip detection",
+          tech: ["Luau", "Security", "Roblox"],
+          video: "https://files.catbox.moe/g1e0uv.mp4",
+        },
+        {
+          id: 8,
+          title: "GUI Framework",
+          image:
+            "https://i.ibb.co/7dBkkTp2/252-B0628-DBCB-4338-9-EB6-147-A999530-B9.png",
+          description:
+            "Declarative UI creation system in Lua (simpler than Roact)",
+          tech: ["Lua", "Roblox", "Framework"],
+          video: "https://files.catbox.moe/a36fj6.mkv",
+        },
+        {
+          id: 9,
+          title: "Admin System",
+          image:
+            "https://i.ibb.co/TDtzt4zR/67256-A5-A-3-AF6-476-E-8-EC2-A0-EA942-E10-BB.png",
+          description: "Terminal-inspired admin panel for Roblox",
+          tech: ["Lua", "Roblox", "Admin"],
+          video: null,
+        },
+        {
+          id: 10,
+          title: "Police Spike Strip",
+          image:
+            "https://i.ibb.co/nqp5d38V/2-FA080-EF-325-F-4-EB4-A82-B-7-C5-E12-B577-CE.png",
+          description:
+            "RP asset with placement animation, works with A-Chassis",
+          tech: ["Lua", "Roblox", "RP"],
+          video: null,
+        },
+        {
+          id: 11,
+          title: "Admin Panel",
+          image:
+            "https://i.ibb.co/jPm6zSbX/ED30-A6-FD-6317-4-D74-950-D-2-EA30-A089285.png",
+          description:
+            "Secure modular admin panel with permission management and anti-exploit",
+          tech: ["Lua", "Roblox", "Security"],
+          video: "https://files.catbox.moe/t62vz5.mkv",
+        },
+        {
+          id: 12,
+          title: "Chunk Loader Engine",
+          image:
+            "https://i.ibb.co/pB9GPD6w/F51-C595-F-0-F3-A-4011-A582-AA8-F6304-E010.png",
+          description:
+            "Modular chunk loading engine for large game worlds with optimization",
+          tech: ["Luau", "Optimization"],
+          video: null,
+        },
+      ];
+
+      // Enhanced Skills Data
+      const skills = [
+        { name: "Luau", icon: "🎮", level: 100, experience: "4Y" },
+        { name: "Python", icon: "🐍", level: 100, experience: "4Y" },
+        { name: "JavaScript", icon: "⚡", level: 85, experience: "3Y" },
+        { name: "Roblox Studio", icon: "🎨", level: 100, experience: "4Y" },
+        { name: "Discord API", icon: "💬", level: 100, experience: "3Y" },
+        { name: "Node.js", icon: "🟢", level: 85, experience: "3Y" },
+        { name: "Kotlin", icon: "📱", level: 20, experience: "1Y" },
+        { name: "C++", icon: "⚙️", level: 5, experience: "<1Y" },
+      ];
+
+      // Initialize
+      window.addEventListener("load", () => {
+        setTimeout(() => {
+          document.getElementById("loading").classList.add("hidden");
+          init3DBackground();
+          initParticles();
+          renderProjects();
+          renderSkills();
+          initScrollAnimations();
+          initEnhancedCursor();
+          initTyping();
+        }, 1000);
+      });
+
+      // Enhanced Cursor System with Trail and Glow
+      function initEnhancedCursor() {
+        const dot = document.querySelector(".cursor-dot");
+        const outline = document.querySelector(".cursor-outline");
+        const glow = document.querySelector(".cursor-glow");
+        let mouseX = 0,
+          mouseY = 0;
+        let dotX = 0,
+          dotY = 0;
+        let outlineX = 0,
+          outlineY = 0;
+        let glowX = 0,
+          glowY = 0;
+
+        // Update mouse position
+        window.addEventListener("mousemove", (e) => {
+          mouseX = e.clientX;
+          mouseY = e.clientY;
+
+          // Create trail
+          if (Math.random() > 0.8) {
+            createTrail(mouseX, mouseY);
+          }
+        });
+
+        // Smooth cursor animation
+        function animateCursor() {
+          // Smooth follow effect
+          dotX += (mouseX - dotX) * 0.2;
+          dotY += (mouseY - dotY) * 0.2;
+          outlineX += (mouseX - outlineX) * 0.15;
+          outlineY += (mouseY - outlineY) * 0.15;
+          glowX += (mouseX - glowX) * 0.1;
+          glowY += (mouseY - glowY) * 0.1;
+
+          dot.style.left = dotX + "px";
+          dot.style.top = dotY + "px";
+          outline.style.left = outlineX + "px";
+          outline.style.top = outlineY + "px";
+          glow.style.left = glowX - 50 + "px";
+          glow.style.top = glowY - 50 + "px";
+
+          requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Create trail particles
+        function createTrail(x, y) {
+          const trail = document.createElement("div");
+          trail.className = "cursor-trail";
+          trail.style.left = x + "px";
+          trail.style.top = y + "px";
+          document.body.appendChild(trail);
+
+          setTimeout(() => {
+            trail.remove();
+          }, 800);
+        }
+
+        // Enhanced hover effects
+        document
+          .querySelectorAll("a, button, .skill-orb, .project-card")
+          .forEach((el) => {
+            el.addEventListener("mouseenter", () => {
+              document.body.classList.add("cursor-hover");
+            });
+            el.addEventListener("mouseleave", () => {
+              document.body.classList.remove("cursor-hover");
+            });
+          });
+
+        // Click effect
+        document.addEventListener("mousedown", () => {
+          document.body.classList.add("cursor-click");
+          // Create burst effect
+          for (let i = 0; i < 8; i++) {
+            setTimeout(() => createTrail(mouseX, mouseY), i * 20);
+          }
+        });
+
+        document.addEventListener("mouseup", () => {
+          document.body.classList.remove("cursor-click");
+        });
+      }
+
+      // 3D Background
       function init3DBackground() {
         const container = document.getElementById("canvas-container");
         const scene = new THREE.Scene();
@@ -1171,19 +1592,16 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         container.appendChild(renderer.domElement);
 
-        // Create particles
+        // Particles
         const geometry = new THREE.BufferGeometry();
         const vertices = [];
-        const particleCount = 1000;
-
-        for (let i = 0; i < particleCount; i++) {
+        for (let i = 0; i < 2000; i++) {
           vertices.push(
             Math.random() * 2000 - 1000,
             Math.random() * 2000 - 1000,
             Math.random() * 2000 - 1000
           );
         }
-
         geometry.setAttribute(
           "position",
           new THREE.Float32BufferAttribute(vertices, 3)
@@ -1201,33 +1619,24 @@
 
         camera.position.z = 500;
 
-        // Mouse interaction
-        let mouseX = 0;
-        let mouseY = 0;
-
-        document.addEventListener("mousemove", (event) => {
-          mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-          mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+        let mouseX = 0,
+          mouseY = 0;
+        document.addEventListener("mousemove", (e) => {
+          mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+          mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
         });
 
-        // Animation
         function animate() {
           requestAnimationFrame(animate);
-
-          particles.rotation.x += 0.0001;
-          particles.rotation.y += 0.0002;
-
-          // Follow mouse
-          camera.position.x += (mouseX * 50 - camera.position.x) * 0.05;
-          camera.position.y += (mouseY * 50 - camera.position.y) * 0.05;
+          particles.rotation.x += 0.0005;
+          particles.rotation.y += 0.001;
+          camera.position.x += (mouseX * 100 - camera.position.x) * 0.05;
+          camera.position.y += (mouseY * 100 - camera.position.y) * 0.05;
           camera.lookAt(scene.position);
-
           renderer.render(scene, camera);
         }
-
         animate();
 
-        // Handle window resize
         window.addEventListener("resize", () => {
           camera.aspect = window.innerWidth / window.innerHeight;
           camera.updateProjectionMatrix();
@@ -1235,480 +1644,214 @@
         });
       }
 
-      // Initialize 3D background
-      init3DBackground();
-
-      // Create floating particles
-      function createParticles() {
-        const particlesContainer = document.getElementById("particles");
-        const particleCount = 50;
-
-        for (let i = 0; i < particleCount; i++) {
+      // Particle System
+      function initParticles() {
+        const container = document.getElementById("particleContainer");
+        for (let i = 0; i < 50; i++) {
           const particle = document.createElement("div");
           particle.className = "particle";
-          particle.style.width = Math.random() * 3 + 1 + "px";
+          particle.style.width = Math.random() * 4 + 2 + "px";
           particle.style.height = particle.style.width;
           particle.style.left = Math.random() * 100 + "%";
-          particle.style.animationDelay = Math.random() * 6 + "s";
-          particle.style.animationDuration = Math.random() * 3 + 3 + "s";
-          particlesContainer.appendChild(particle);
+          particle.style.top = Math.random() * 100 + "%";
+          particle.style.animation = `floatAnimation ${
+            Math.random() * 10 + 5
+          }s ease-in-out infinite`;
+          particle.style.animationDelay = Math.random() * 5 + "s";
+          container.appendChild(particle);
         }
       }
 
-      createParticles();
+      // Typing Effect
+      function initTyping() {
+        const phrases = [
+          "Roblox Developer",
+          "Programmer",
+          "Bot Creator",
+          "System Architect",
+        ];
+        let phraseIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        const typingText = document.getElementById("typingText");
 
-      // Loading screen
-      window.addEventListener("load", () => {
-        setTimeout(() => {
-          document.getElementById("loading").classList.add("hidden");
-        }, 1000);
-      });
+        function type() {
+          const current = phrases[phraseIndex];
 
-      // Scroll indicator
-      window.addEventListener("scroll", () => {
-        const scrollIndicator = document.getElementById("scroll-indicator");
-        const windowHeight =
-          document.documentElement.scrollHeight -
-          document.documentElement.clientHeight;
-        const scrolled = (window.scrollY / windowHeight) * 100;
-        scrollIndicator.style.transform = `scaleX(${scrolled / 100})`;
-      });
-
-      // Mobile menu toggle
-      function toggleMobileMenu() {
-        const menu = document.getElementById("mobile-menu");
-        const hamburger = document.querySelector(".hamburger");
-        menu.classList.toggle("active");
-        hamburger.classList.toggle("active");
-      }
-
-      // Typing animation
-      const phrases = ["Roblox Dev", "Programmer", "Bot Developer"];
-      let currentPhraseIndex = 0;
-      let currentText = "";
-      let isDeleting = false;
-      const typingElement = document.getElementById("typing-text");
-
-      function typeEffect() {
-        const currentPhrase = phrases[currentPhraseIndex];
-
-        if (!isDeleting) {
-          currentText = currentPhrase.substring(0, currentText.length + 1);
-          typingElement.textContent = currentText;
-
-          if (currentText === currentPhrase) {
-            setTimeout(() => {
-              isDeleting = true;
-            }, 2000);
-            setTimeout(typeEffect, 2000);
+          if (isDeleting) {
+            typingText.textContent = current.substring(0, charIndex - 1);
+            charIndex--;
           } else {
-            setTimeout(typeEffect, 150);
+            typingText.textContent = current.substring(0, charIndex + 1);
+            charIndex++;
           }
-        } else {
-          currentText = currentText.substring(0, currentText.length - 1);
-          typingElement.textContent = currentText;
 
-          if (currentText === "") {
+          let typeSpeed = isDeleting ? 50 : 150;
+
+          if (!isDeleting && charIndex === current.length) {
+            typeSpeed = 2000;
+            isDeleting = true;
+          } else if (isDeleting && charIndex === 0) {
             isDeleting = false;
-            currentPhraseIndex = (currentPhraseIndex + 1) % phrases.length;
-            setTimeout(typeEffect, 500);
-          } else {
-            setTimeout(typeEffect, 50);
+            phraseIndex = (phraseIndex + 1) % phrases.length;
+            typeSpeed = 500;
           }
+
+          setTimeout(type, typeSpeed);
         }
+
+        type();
       }
 
-      typeEffect();
-
-      // Smooth scroll function
-      function scrollToSection(sectionId) {
-        const element = document.getElementById(sectionId);
-        element.scrollIntoView({ behavior: "smooth" });
-
-        const menu = document.getElementById("mobile-menu");
-        const hamburger = document.querySelector(".hamburger");
-        if (menu.classList.contains("active")) {
-          menu.classList.remove("active");
-          hamburger.classList.remove("active");
-        }
-      }
-
-      // Enhanced Intersection Observer
-      const observerOptions = {
-        threshold: 0.1,
-        rootMargin: "0px 0px -50px 0px",
-      };
-
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("fade-in-visible");
-
-            // Additional animations
-            if (
-              entry.target.classList.contains("slide-in-left") ||
-              entry.target.classList.contains("slide-in-right")
-            ) {
-              entry.target.classList.add("visible");
-            }
-
-            if (entry.target.classList.contains("reveal-text")) {
-              entry.target.classList.add("visible");
-            }
-          }
-        });
-      }, observerOptions);
-
-      document
-        .querySelectorAll(
-          ".fade-in, .slide-in-left, .slide-in-right, .reveal-text"
-        )
-        .forEach((el) => {
-          observer.observe(el);
-        });
-
-      // Projects data
-      const projects = [
-        {
-          id: 1,
-          title: "Gun System in 3rd Person",
-          image:
-            "https://i.ibb.co/5WjfXkvL/E64-FC619-8-B23-4-DC9-9-E19-72-EEEF971937-kopie.png",
-          description:
-            "Open source gun system, with animations (credits: to czeck), raycast modules, heavily modular, source on my GitHub",
-          tech: ["Lua", "Roblox Studio", "Sys"],
-          video: "",
-        },
-        {
-          id: 2,
-          title: "Basic Anticheat",
-          image:
-            "https://i.ibb.co/8DzMpd8L/EFE78065-0-A9-B-43-C6-976-E-A0773081-E221.png",
-          description:
-            "Server-side security system designed to protect your Roblox game from exploiters and cheaters. Source on my GitHub",
-          tech: ["Roblox", "MY stuff", "Luau", "Security"],
-          video: "https://files.catbox.moe/g2ot21.mkv",
-        },
-        {
-          id: 3,
-          title: "FLOYD",
-          image:
-            "https://i.ibb.co/zhjyrqms/8-E73548-F-C176-4836-9237-AA8-F446748-BF.png",
-          description:
-            "Assistant for developers/admins in game, view local scripts, edit workspace and so long it should be open source if it doesn't then it is under update",
-          tech: ["Roblox", "MY stuff", "Luau"],
-          video: "https://files.catbox.moe/abwsbr.mkv",
-        },
-        {
-          id: 4,
-          title: "Character Creation System",
-          image:
-            "https://i.ibb.co/spX7xXP8/2931740-B-4-C7-C-4-E2-A-905-D-35-B0-C3-E7-C077.png",
-          description: "Character Creation system similar to GTA V",
-          tech: ["Roblox", "Security", "Luau"],
-          video: null,
-        },
-        {
-          id: 5,
-          title: "BrainRot Game",
-          image:
-            "https://i.ibb.co/QwnJXZQ/CEC592-F2-8-D91-42-FE-BE1-B-75-A5-E8382300.png",
-          description:
-            "I'm not proud of it :(, but I made a lot of quality systems here and scripted the AI",
-          tech: ["Roblox", "Games", "AI", "Luau"],
-          video: "https://files.catbox.moe/ounxuq.mkv",
-        },
-        {
-          id: 6,
-          title: "Skiddy Scripts Finder",
-          image:
-            "https://i.ibb.co/fVFVvsK7/CDF99423-808-D-492-F-8782-AA80-E4-D583-F3.png",
-          description:
-            "Skiddy finder, focuses on require(assetID), loadstring(), Base64 encoded requires/loadstrings, calculated IDs (math operations, etc). I am extremely proud of this project and definitely want to improve this system and help creators maintain a safe environment. Source is not available yet but you can look at my attached video.",
-          tech: ["Roblox", "Security", "Luau"],
-          video: "https://files.catbox.moe/7wg1ao.mkv",
-        },
-        {
-          id: 7,
-          title: "AntiCheat",
-          image:
-            "https://i.ibb.co/cc38CHkf/B6-F89919-EB6-C-4954-962-D-9-A062401739-F.png",
-          description:
-            "Anti-hook, server validation, movement detection, attaching noclip module",
-          tech: ["Roblox", "Security", "Luau"],
-          video: "https://files.catbox.moe/g1e0uv.mp4",
-        },
-        {
-          id: 8,
-          title: "Open-Source GUI Framework",
-          image:
-            "https://i.ibb.co/7dBkkTp2/252-B0628-DBCB-4338-9-EB6-147-A999530-B9.png",
-          description:
-            "A system that allows you to declaratively create UIs in Lua (something like Roact, but simpler). Source: https://github.com/D-M-dev/Modular-Roblox-GUI-framework",
-          tech: ["Lua", "Roblox", "Sys"],
-          video: "https://files.catbox.moe/a36fj6.mkv",
-        },
-        {
-          id: 9,
-          title: "Open-Source Admin System",
-          image:
-            "https://i.ibb.co/TDtzt4zR/67256-A5-A-3-AF6-476-E-8-EC2-A0-EA942-E10-BB.png",
-          description: "Inspired by my mind and arch terminal.",
-          tech: ["Lua", "Roblox", "Sys"],
-          video: null,
-        },
-        {
-          id: 10,
-          title: "RP Stuff - Police Spike Strip",
-          image:
-            "https://i.ibb.co/nqp5d38V/2-FA080-EF-325-F-4-EB4-A82-B-7-C5-E12-B577-CE.png",
-          description:
-            "I did a lot of RP stuff, every would not fit here... This spike strip has place animation and working spike with a-chassis",
-          tech: ["Lua", "Roblox", "Sys"],
-          video: null,
-        },
-
-
-                {
-          id: 10,
-          title: "Admin Panel",
-          image:
-            "https://i.ibb.co/jPm6zSbX/ED30-A6-FD-6317-4-D74-950-D-2-EA30-A089285.png",
-          description:
-            "Secure, and modular admin panel system for Roblox Studio with comprehensive permission management, logging, and anti-exploit features.",
-          tech: ["Lua", "Roblox", "Sys"],
-          video: "https://files.catbox.moe/t62vz5.mkv",
-        },        
-
-
-        {
-          id: 11,
-          title: "Chunk loader engine",
-          image:
-            "https://i.ibb.co/pB9GPD6w/F51-C595-F-0-F3-A-4011-A582-AA8-F6304-E010.png",
-          description:
-            "A fully modular chunk loading engine for Roblox that allows for dynamic loading of large game worlds with advanced optimization and management features, source on my github",
-          tech: ["Luau"],
-          video: null,
-        },
-        {
-          id: 12,
-          title: "Server Lister with Flags",
-          image:
-            "https://i.ibb.co/hFcjYvmb/BA033059-A59-A-4-A49-B86-F-863-D74-B98-AC3.png",
-          description: "Server lister with player counter, flag id and join.",
-          tech: ["Luau"],
-          video: null,
-        },
-        {
-          id: 13,
-          title: "Discord Ticket Bot",
-          image:
-            "https://i.ibb.co/PsNnLV6H/EB99-CCBC-6-B20-4-A8-E-8050-6504068048-E7.png",
-          description:
-            "Advanced Discord bot (discord.py), after close log, send DMs to users etc.",
-          tech: ["Discord"],
-          video: null,
-        },
-        {
-          id: 14,
-          title: "Discord-Roblox Moderation Bot",
-          image:
-            "https://i.ibb.co/fzb1QW1m/7-FD8-DCF1-F4-B8-4-A86-AF08-CAC12-A24-FCC0.png",
-          description:
-            "Advanced Discord bot (node.js), managing Roblox group, moderation action from Discord to Roblox game (bans, warns, etc)",
-          tech: ["Discord"],
-          video: null,
-        },
-        {
-          id: 15,
-          title: "TeleportManager",
-          image:
-            "https://i.ibb.co/27VPm8FB/24-E774-A3-05-B4-41-F0-8888-45157734-F3-CA.png",
-          description: "Solution for easy teleportation...",
-          tech: ["RP"],
-          video: null,
-        },
-        {
-          id: 16,
-          title: "This Web",
-          image: "",
-          description: "XD, I have to put this there.",
-          tech: ["React", "Node.js", "Chart.js"],
-          video: null,
-        },
-        {
-          id: 17,
-          title: "Custom API Wrapper",
-          image: "",
-          description:
-            "Python wrapper for Roblox API with rate limiting and caching",
-          tech: ["Python", "FastAPI", "Redis"],
-          video: null,
-        },
-        {
-          id: 18,
-          title: "FL4gs",
-          image: "",
-          description:
-            "FL4GS provides centralized management for application state using flags (state markers) that you can set, retrieve, freeze, or remove. Forked and customized from https://github.com/STRA8/FL4GS",
-          tech: ["LUAU", "GitHub"],
-          video: null,
-        },
-        {
-          id: 19,
-          title: "Trello-Discord-Roblox Integration",
-          image: "",
-          description:
-            "A Discord bot connected to the Trello API and a Roblox server system, designed to monitor and retrieve information from both platforms. The bot automates moderation tasks in Roblox by processing API commands and provides seamless integration with Trello for task management and tracking.",
-          tech: ["LUAU", "GitHub", "Python"],
-          video: null,
-        },
-      ];
-
-      // Skills data
-      const skills = [
-        { name: "Luau", icon: "🎮", level: 100 },
-        { name: "Python", icon: "🐍", level: 100 },
-        { name: "JavaScript/Node.js", icon: "⚡", level: 85 },
-        { name: "Roblox Studio", icon: "🎨", level: 100 },
-        { name: "Discord API", icon: "💬", level: 100 },
-        { name: "Kotlin", icon: "📱", level: 20 },
-        { name: "C++", icon: "⚙️", level: 5 },
-      ];
-
-      // Render projects
-      const projectsGrid = document.getElementById("projects-grid");
-      projects.forEach((project, index) => {
-        const projectCard = document.createElement("div");
-        projectCard.className =
-          "project-card bg-gray-900 rounded-xl overflow-hidden cursor-pointer holographic";
-        projectCard.style.animationDelay = `${index * 0.1}s`;
-        projectCard.onclick = () => openModal(project);
-
-        projectCard.innerHTML = `
-          <div class="overflow-hidden h-40 md:h-48">
-            <img
-              src="${
-                project.image ||
-                "https://via.placeholder.com/400x300/1f2937/ffffff?text=Project"
-              }"
-              alt="${project.title}"
-              class="project-image w-full h-full object-cover"
-              loading="lazy"
-            />
-          </div>
-          <div class="p-4 md:p-6">
-            <h3 class="text-lg md:text-xl font-semibold mb-2">${
-              project.title
-            }</h3>
-            <p class="text-gray-400 text-xs md:text-sm mb-3 md:mb-4 line-clamp-3">${
-              project.description
-            }</p>
-            <div class="flex flex-wrap gap-2">
-              ${project.tech
-                .map(
-                  (tech) => `
-                <span class="px-2 md:px-3 py-1 bg-gray-800 text-gray-300 text-xs rounded-full">
-                  ${tech}
-                </span>
-              `
-                )
-                .join("")}
-            </div>
-          </div>
-        `;
-
-        projectsGrid.appendChild(projectCard);
+      // Scroll Progress
+      window.addEventListener("scroll", () => {
+        const scrollProgress = document.getElementById("scrollProgress");
+        const scrollHeight =
+          document.documentElement.scrollHeight - window.innerHeight;
+        const scrolled = (window.scrollY / scrollHeight) * 100;
+        scrollProgress.style.transform = `scaleX(${scrolled / 100})`;
       });
 
-      // Render skills
-      const skillsGrid = document.getElementById("skills-grid");
-      skills.forEach((skill, index) => {
-        const skillCard = document.createElement("div");
-        skillCard.className =
-          "skill-card bg-gray-900 p-4 md:p-6 rounded-xl text-center holographic";
+      // Scroll Animations
+      function initScrollAnimations() {
+        const reveals = document.querySelectorAll(".reveal");
 
-        setTimeout(() => {
-          skillCard.style.opacity = "0";
-          skillCard.style.transform = "translateY(30px)";
-          skillCard.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("active");
+              }
+            });
+          },
+          { threshold: 0.1 }
+        );
+
+        reveals.forEach((reveal) => observer.observe(reveal));
+      }
+
+      // Render Projects
+      function renderProjects() {
+        const grid = document.getElementById("projectsGrid");
+        projects.forEach((project, index) => {
+          const card = document.createElement("div");
+          card.className =
+            "project-card holo-card rounded-2xl overflow-hidden cursor-pointer reveal";
+          card.style.animationDelay = `${index * 0.1}s`;
+          card.onclick = () => openModal(project);
+
+          card.innerHTML = `
+            <div class="overflow-hidden h-48">
+              <img src="${
+                project.image ||
+                "https://via.placeholder.com/400x300/000/fff?text=Project"
+              }" 
+                   alt="${project.title}" 
+                   class="project-image w-full h-full object-cover" />
+            </div>
+            <div class="p-6">
+              <h3 class="text-2xl font-bold mb-2">${project.title}</h3>
+              <p class="text-gray-400 text-sm mb-4 line-clamp-2">${
+                project.description
+              }</p>
+              <div class="flex flex-wrap gap-2">
+                ${project.tech
+                  .map(
+                    (tech) => `
+                  <span class="px-3 py-1 bg-gray-800 text-gray-300 text-xs rounded-full">${tech}</span>
+                `
+                  )
+                  .join("")}
+              </div>
+            </div>
+          `;
+
+          grid.appendChild(card);
+        });
+      }
+
+      // Render Enhanced Skills with 3D Orbs
+      function renderSkills() {
+        const sphere = document.getElementById("skillsSphere");
+
+        skills.forEach((skill, index) => {
+          const orb = document.createElement("div");
+          orb.className = "skill-orb reveal";
+          orb.style.animationDelay = `${index * 0.1}s`;
+
+          orb.innerHTML = `
+            <div class="skill-orb-inner">
+              ${
+                skill.experience
+                  ? `<div class="experience-badge">${skill.experience}</div>`
+                  : ""
+              }
+              <div class="skill-icon">${skill.icon}</div>
+              <div class="skill-name">${skill.name}</div>
+              <div class="skill-level">${skill.level}%</div>
+            </div>
+          `;
+
+          // Add particle burst on hover
+          orb.addEventListener("mouseenter", () => {
+            createSkillParticles(orb);
+          });
+
+          sphere.appendChild(orb);
+        });
+      }
+
+      // Create particle burst effect for skills
+      function createSkillParticles(orb) {
+        const rect = orb.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        for (let i = 0; i < 12; i++) {
+          const particle = document.createElement("div");
+          particle.className = "skill-particle";
+
+          const angle = (Math.PI * 2 * i) / 12;
+          const distance = 100;
+          const tx = Math.cos(angle) * distance;
+          const ty = Math.sin(angle) * distance;
+
+          particle.style.left = centerX + "px";
+          particle.style.top = centerY + "px";
+          particle.style.setProperty("--tx", tx + "px");
+          particle.style.setProperty("--ty", ty + "px");
+
+          document.body.appendChild(particle);
 
           setTimeout(() => {
-            skillCard.style.opacity = "1";
-            skillCard.style.transform = "translateY(0)";
-          }, 50);
-        }, index * 100);
+            particle.remove();
+          }, 1000);
+        }
+      }
 
-        skillCard.innerHTML = `
-          <div class="text-3xl md:text-5xl mb-3 md:mb-4">${skill.icon}</div>
-          <h3 class="text-base md:text-xl font-semibold mb-2 md:mb-3">${skill.name}</h3>
-          <div class="bg-gray-800 rounded-full h-2 overflow-hidden">
-            <div
-              class="progress-bar bg-white h-full rounded-full"
-              style="width: 0%"
-              data-width="${skill.level}"
-            ></div>
-          </div>
-        `;
-
-        skillsGrid.appendChild(skillCard);
-      });
-
-      // Animate skill bars when visible
-      const skillObserver = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              const progressBars =
-                entry.target.querySelectorAll(".progress-bar");
-              progressBars.forEach((bar) => {
-                const width = bar.getAttribute("data-width");
-                setTimeout(() => {
-                  bar.style.width = width + "%";
-                }, 300);
-              });
-              skillObserver.unobserve(entry.target);
-            }
-          });
-        },
-        { threshold: 0.2 }
-      );
-
-      skillObserver.observe(document.getElementById("skills-grid"));
-
-      // Modal functions
+      // Modal Functions
       function openModal(project) {
-        const modal = document.getElementById("project-modal");
-        document.getElementById("modal-image").src =
+        const modal = document.getElementById("modal");
+        document.getElementById("modalImage").src =
           project.image ||
-          "https://via.placeholder.com/800x400/1f2937/ffffff?text=Project";
-        document.getElementById("modal-image").alt = project.title;
-        document.getElementById("modal-title").textContent = project.title;
-        document.getElementById("modal-description").textContent =
+          "https://via.placeholder.com/800x400/000/fff?text=Project";
+        document.getElementById("modalTitle").textContent = project.title;
+        document.getElementById("modalDescription").textContent =
           project.description;
 
-        const techContainer = document.getElementById("modal-tech");
+        const techContainer = document.getElementById("modalTech");
         techContainer.innerHTML = project.tech
           .map(
             (tech) => `
-          <span class="px-3 md:px-4 py-1 md:py-2 bg-gray-800 text-gray-200 rounded-full text-xs md:text-sm">
-            ${tech}
-          </span>
+          <span class="px-4 py-2 bg-gray-800 text-gray-200 rounded-full">${tech}</span>
         `
           )
           .join("");
 
-        const videoContainer = document.getElementById("modal-video");
+        const videoContainer = document.getElementById("modalVideo");
         if (project.video) {
           videoContainer.innerHTML = `
-            <video
-              src="${project.video}"
-              controls
-              class="w-full rounded-xl"
-              loading="lazy"
-              preload="metadata"
-            ></video>
+            <video src="${project.video}" controls class="w-full rounded-xl"></video>
           `;
         } else {
           videoContainer.innerHTML = "";
@@ -1719,7 +1862,7 @@
       }
 
       function closeModal() {
-        const modal = document.getElementById("project-modal");
+        const modal = document.getElementById("modal");
         modal.classList.remove("active");
         document.body.style.overflow = "auto";
 
@@ -1730,28 +1873,53 @@
         }
       }
 
-      function handleModalClick(event) {
-        if (event.target.id === "project-modal") {
-          closeModal();
-        }
+      // Mobile Menu
+      function toggleMenu() {
+        const menu = document.getElementById("mobileMenu");
+        const hamburger = document.querySelector(".hamburger");
+        menu.classList.toggle("active");
+        hamburger.classList.toggle("active");
       }
 
+      // Escape key closes modal
       document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") {
-          closeModal();
-        }
+        if (e.key === "Escape") closeModal();
       });
 
-      document.getElementById("project-modal").addEventListener(
-        "touchmove",
-        (e) => {
-          const modalContent = document.querySelector(".modal-content");
-          if (!modalContent.contains(e.target)) {
-            e.preventDefault();
-          }
-        },
-        { passive: false }
-      );
+      // Magnetic buttons effect
+      document.querySelectorAll(".magnetic-btn").forEach((btn) => {
+        btn.addEventListener("mousemove", (e) => {
+          const rect = btn.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+          btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+        });
+
+        btn.addEventListener("mouseleave", () => {
+          btn.style.transform = "translate(0, 0)";
+        });
+      });
+
+      // Tilt effect for cards
+      document.querySelectorAll(".tilt-card").forEach((card) => {
+        card.addEventListener("mousemove", (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          const rotateX = (y - centerY) / 10;
+          const rotateY = (centerX - x) / 10;
+
+          card.style.setProperty("--rotateX", `${rotateX}deg`);
+          card.style.setProperty("--rotateY", `${rotateY}deg`);
+        });
+
+        card.addEventListener("mouseleave", () => {
+          card.style.setProperty("--rotateX", "0deg");
+          card.style.setProperty("--rotateY", "0deg");
+        });
+      });
     </script>
   </body>
 </html>
